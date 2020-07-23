@@ -1,0 +1,23 @@
+#cursor {
+    position: absolute;
+    height: 15px;
+    width: 1px;
+    background-color: black;
+}
+
+#cursorContainer {
+    overflow: visible;
+}
+
+#innerSocket {
+    color: darkgreen;
+}
+
+#dock {
+    display: -webkit-flex;
+    flex-direction: row;
+}
+
+.input {
+    white-space: pre;
+}
