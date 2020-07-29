@@ -1,3 +1,5 @@
+import { Socket } from "./Socket";
+
 export class Dock {
     private socketId: string;
     private input: string;
@@ -5,8 +7,8 @@ export class Dock {
     private cursorPosition: number;
     private cursorBlink: NodeJS.Timeout;
 
-    constructor(initSocketId: string) {
-        this.socketId = initSocketId;
+    constructor(initSocket: Socket) {
+        this.socketId = initSocket.getId();
         this.input = '';
         this.cursorPosition = 0;
 

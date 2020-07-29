@@ -1,18 +1,22 @@
-console.log("everything started")
+import { EditorComplex } from "./EditorComplex";
 
-import { Dock } from "./dock";
+let editorComplex = new EditorComplex();
 
-let dock = new Dock("innerSocket");
+let dock = editorComplex.getDock();
 
 document.addEventListener('keypress', e => {
     console.log(e.key, e.code);
 
-    if (e.code === 'Space') {
-        console.log("hello jeff");
-        dock.intakeCharacter(' ');
-    } else if (e.key !== 'Enter') {
+    if (e.key !== 'Enter') {
         dock.intakeCharacter(e.key);
     }
+
+    // if (e.code === 'Space') {
+    //     console.log("hello jeff");
+    //     dock.intakeCharacter(' ');
+    // } else if (e.key !== 'Enter') {
+    //     dock.intakeCharacter(e.key);
+    // }
 });
 
 document.addEventListener('keydown', (e): void => {

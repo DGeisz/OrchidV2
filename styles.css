@@ -9,10 +9,6 @@
     overflow: visible;
 }
 
-#innerSocket {
-    color: darkgreen;
-}
-
 #dock {
     display: -webkit-flex;
     flex-direction: row;
