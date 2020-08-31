@@ -1,5 +1,5 @@
 export const StatusClass = {
-    valid: 'value',
+    valid: 'valid',
     invalid: 'invalid',
     inProgress: 'inProgress'
 };

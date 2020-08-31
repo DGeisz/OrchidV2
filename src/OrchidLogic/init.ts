@@ -1,11 +1,5 @@
 import { EditorComplex } from "./Editor/EditorComplex";
 
-/**
- * Script that initializes OrchidLogic from skeleton
- * html
- */
-
-
 let editorComplex = new EditorComplex();
 
 let dock = editorComplex.getDock();
@@ -32,5 +26,4 @@ document.addEventListener('keydown', (e): void => {
             dock.goLeft();
             return;
     }
-
 });

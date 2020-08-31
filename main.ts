@@ -1,8 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 
-try {
-    require('electron-reloader')(module);
-} catch (_) {}
+require('electron-reload')(__dirname);
 
 function createWindow() {
     const win = new BrowserWindow({

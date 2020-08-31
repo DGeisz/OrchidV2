@@ -3,6 +3,9 @@ const path = require('path');
 module.exports = {
     entry: './src/OrchidLogic/init.ts',
     mode: "production",
+    watchOptions: {
+        ignored: ["node_modules"]
+    },
     module: {
         rules: [
             {

@@ -19,7 +19,8 @@
 }
 
 .inProgress {
-    color: #2665ed;
+    /*color: #2665ed;*/
+    color: blue;
 }
 
 .valid {

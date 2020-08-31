@@ -1,6 +1,12 @@
 import { Dock } from "./Dock";
-import { LineSocket } from "../Sockets/LineSocket";
+import { LineSocket } from "../Socket/LineSocket";
 
+/**
+ * The editor complex is the overlord of the
+ * operation. It keeps track of all different structures
+ * and terms that are in play, manages the dock, and essentially
+ * manages all "model, controller" operations
+ */
 export class EditorComplex {
 
     private readonly dock: Dock;
@@ -9,7 +15,6 @@ export class EditorComplex {
 
     constructor() {
         this.currentLine = new LineSocket("page", 0);
-        console.log("second");
         this.lines.push(this.currentLine);
 
         this.dock = new Dock(this.currentLine);

@@ -1,7 +1,17 @@
-import { Socket } from "../Sockets/Socket";
+import { Socket } from "../Socket/Socket";
 import { EditorComplex } from "./EditorComplex";
 import { StatusClass } from "../Status/statusMap";
 
+/**
+ * The Dock is the entity that "docks" itself
+ * to a socket, takes input from a user, determines
+ * whether that input corresponds to a structure
+ * that is valid within the given socket, either for
+ * a mathematical or managerial reason, and coordinates the
+ * process of translating that textual input into a structure
+ * both from the perspective of a TypeScript object, but also
+ * as pure html rendered in the app
+ */
 export class Dock {
     private socketId: string;
     private socket: Socket;
@@ -53,6 +63,7 @@ export class Dock {
         const isValidInput = this.socket.isValidSequence(this.input);
 
         const statusClass = isValidInput ? StatusClass.valid : StatusClass.inProgress;
+        console.log("Puny", statusClass)
 
         let input1 = document.createElement("div");
         input1.setAttribute("class", ["input", statusClass].join(' '));
