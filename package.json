@@ -1,0 +1,37 @@
+{
+  "name": "OrchidV2",
+  "version": "1.0.0",
+  "description": "Category of sets based mathematical software that replaces pencil and paper mathematics",
+  "main": "./build/main.js",
+  "scripts": {
+    "start": "npm run compile && electron .",
+    "compile": "tsc && webpack && copyfiles src/Styles/styles.css src/Skeleton/index.html build",
+    "build": "tsc ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DGeisz/OrchidV2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DGeisz/OrchidV2/issues"
+  },
+  "homepage": "https://github.com/DGeisz/OrchidV2#readme",
+  "devDependencies": {
+    "electron": "^9.1.1",
+    "electron-reloader": "^1.0.1",
+    "ts-loader": "^8.0.3",
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "@types/jquery": "^3.5.0",
+    "copyfiles": "^2.3.0",
+    "jquery": "^3.5.1",
+    "uuid": "^8.2.0"
+  }
+}

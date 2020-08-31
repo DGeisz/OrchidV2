@@ -1,5 +1,3 @@
-console.log("Here I am")
-
 import { EditorComplex } from "./Editor/EditorComplex";
 
 /**
@@ -18,13 +16,6 @@ document.addEventListener('keypress', e => {
     if (e.key !== 'Enter') {
         dock.intakeCharacter(e.key);
     }
-
-    // if (e.code === 'Space') {
-    //     console.log("hello jeff");
-    //     dock.intakeCharacter(' ');
-    // } else if (e.key !== 'Enter') {
-    //     dock.intakeCharacter(e.key);
-    // }
 });
 
 document.addEventListener('keydown', (e): void => {

@@ -17,3 +17,15 @@
 .input {
     white-space: pre;
 }
+
+.inProgress {
+    color: #2665ed;
+}
+
+.valid {
+    color: green;
+}
+
+.invalid {
+    color: red;
+}

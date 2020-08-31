@@ -1,13 +1,19 @@
 import { Socket } from "../Sockets/Socket";
+import { EditorComplex } from "./EditorComplex";
+import { StatusClass } from "../Status/statusMap";
 
 export class Dock {
     private socketId: string;
-    private input: string;
+    private socket: Socket;
 
+    private editorComplex: EditorComplex;
+
+    private input: string;
     private cursorPosition: number;
     private cursorBlink: NodeJS.Timeout;
 
     constructor(initSocket: Socket) {
+        this.socket = initSocket;
         this.socketId = initSocket.getId();
         this.input = '';
         this.cursorPosition = 0;
@@ -44,8 +50,12 @@ export class Dock {
             dock.removeChild(dock.lastChild);
         }
 
+        const isValidInput = this.socket.isValidSequence(this.input);
+
+        const statusClass = isValidInput ? StatusClass.valid : StatusClass.inProgress;
+
         let input1 = document.createElement("div");
-        input1.setAttribute("class", "input");
+        input1.setAttribute("class", ["input", statusClass].join(' '));
         input1.innerText = this.input.slice(0, this.cursorPosition);
         let cursorContainer = document.createElement("div");
         cursorContainer.setAttribute("id", "cursorContainer");
@@ -53,7 +63,7 @@ export class Dock {
         cursor.setAttribute("id", "cursor");
         cursorContainer.appendChild(cursor);
         let input2 = document.createElement("div");
-        input2.setAttribute("class", "input");
+        input2.setAttribute("class", ["input", statusClass].join(' '));
         input2.innerText = this.input.slice(this.cursorPosition);
 
         dock.appendChild(input1);
