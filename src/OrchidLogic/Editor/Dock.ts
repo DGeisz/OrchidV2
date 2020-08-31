@@ -1,4 +1,4 @@
-import { Socket } from "./Socket";
+import { Socket } from "../Sockets/Socket";
 
 export class Dock {
     private socketId: string;

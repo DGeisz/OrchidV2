@@ -1,5 +1,5 @@
-import { Dock } from "./dock";
-import { LineSocket } from "./LineSocket";
+import { Dock } from "./Dock";
+import { LineSocket } from "../Sockets/LineSocket";
 
 export class EditorComplex {
 

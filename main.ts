@@ -9,8 +9,8 @@ function createWindow() {
         }
     });
 
-    console.log(__dirname)
-    win.loadFile([__dirname, '/index.html'].join(''));
+    console.log(__dirname);
+    win.loadFile([__dirname, '/src/Skeleton/index.html'].join('')).catch(e => console.log("Error: ", e));
 }
 
 app.whenReady().then(createWindow);

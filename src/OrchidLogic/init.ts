@@ -1,4 +1,12 @@
-import { EditorComplex } from "./EditorComplex";
+console.log("Here I am")
+
+import { EditorComplex } from "./Editor/EditorComplex";
+
+/**
+ * Script that initializes OrchidLogic from skeleton
+ * html
+ */
+
 
 let editorComplex = new EditorComplex();
 
