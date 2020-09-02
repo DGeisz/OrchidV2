@@ -14,8 +14,20 @@
     flex-direction: row;
 }
 
+div {
+    display: -webkit-flex;
+    flex-direction: row;
+    white-space: pre;
+}
+
+.socket {
+    display: -webkit-flex;
+    flex-direction: row;
+}
+
 .input {
     white-space: pre;
+    font-style: italic;
 }
 
 .inProgress {

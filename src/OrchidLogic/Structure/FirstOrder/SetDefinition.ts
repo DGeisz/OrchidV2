@@ -8,13 +8,13 @@ import { TermDefinitionSocket } from "../../Socket/TermDefinitionSocket";
  */
 export class SetDefinition extends Structure {
 
-    constructor(domParentId: string, parentSocket: Socket) {
-        super(domParentId, parentSocket);
+    constructor(parentSocket: Socket) {
+        super(parentSocket);
 
         const setDefElement = document.createElement('div');
         setDefElement.setAttribute('id', this.id);
 
-        const parentElement = document.getElementById(domParentId);
+        const parentElement = document.getElementById(this.parentSocket.getId());
         parentElement.appendChild(setDefElement);
 
         const termDefSocketHolder = document.createElement('div');
@@ -26,6 +26,11 @@ export class SetDefinition extends Structure {
         fillerTextElement.innerText = ' = {}';
         setDefElement.appendChild(fillerTextElement);
 
-        this.childSockets.push(new TermDefinitionSocket(termDefSocketHolderId, this));
+        const termDefSocket = new TermDefinitionSocket(termDefSocketHolderId, this);
+        termDefSocket.setNextSocket(parentSocket.getNextSocket());
+        parentSocket.syncWithNextSocket(termDefSocket);
+
+        this.childSockets.push(termDefSocket);
     }
 }
+

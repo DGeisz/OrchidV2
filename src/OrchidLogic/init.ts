@@ -7,7 +7,7 @@ let dock = editorComplex.getDock();
 document.addEventListener('keypress', e => {
     console.log(e.key, e.code);
 
-    if (e.key !== 'Enter') {
+    if (e.key.length === 1) {
         dock.intakeCharacter(e.key);
     }
 });
@@ -25,5 +25,10 @@ document.addEventListener('keydown', (e): void => {
         case "ArrowLeft":
             dock.goLeft();
             return;
+        case "Enter":
+            dock.commitSequence();
+            return;
+
+
     }
 });

@@ -18,20 +18,41 @@ export class Socket {
     protected parentStructure: Structure | null = null;
 
     /**
+     * Plugged in child structure, if any
+     */
+    protected childStructure: Structure | null = null;
+
+    /**
      * Constructor not only creates a new instance of
      * a socket, but it also populates DOM with corresponding html
      */
     constructor(domParentId: string) {
         this.domParentId = domParentId;
         this.id = v4();
+
+        let thisElement = document.createElement("div");
+        thisElement.setAttribute('id', this.id);
+        thisElement.setAttribute('class', 'socket');
+        thisElement.innerText = "☐";
+
+        const parent = document.getElementById(this.domParentId);
+        parent.appendChild(thisElement);
     }
 
     getId(): string {
         return this.id;
     }
 
+    getPrevSocket(): Socket | null {
+        return this.prevSocket;
+    }
+
     setPrevSocket(socket: Socket): void {
         this.prevSocket = socket;
+    }
+
+    getNextSocket(): Socket | null {
+        return this.nextSocket;
     }
 
     setNextSocket(socket: Socket): void {
@@ -58,13 +79,7 @@ export class Socket {
 
     /**
      * Attempts to commit a particular sequence.
-     * If the sequence is valid, injects the proper
-     * html corresponding to the sequence and returns
-     * the id of the next socket.  If the sequence is
-     * invalid, returns an empty string
      */
-    commitSequence(seq: string): string {
-        return "";
-    }
+    commitSequence(seq: string): void {}
 
 }

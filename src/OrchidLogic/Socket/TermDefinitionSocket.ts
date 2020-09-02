@@ -12,5 +12,11 @@ export class TermDefinitionSocket extends Socket {
     constructor(domParentId: string, parentStructure: Structure) {
         super(domParentId);
         this.setParentStructure(parentStructure);
+
+        const socketElement = document.createElement('div');
+        socketElement.setAttribute('id', this.id);
+
+        const parentElement = document.getElementById(this.domParentId);
+        parentElement.appendChild(socketElement);
     }
 }

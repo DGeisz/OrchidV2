@@ -13,27 +13,17 @@ import { StatusClass } from "../Status/statusMap";
  * as pure html rendered in the app
  */
 export class Dock {
-    private socketId: string;
     private socket: Socket;
 
     private editorComplex: EditorComplex;
 
-    private input: string;
-    private cursorPosition: number;
+    private input: string = '';
+    private cursorPosition: number = 0;
     private cursorBlink: NodeJS.Timeout;
 
     constructor(initSocket: Socket) {
         this.socket = initSocket;
-        this.socketId = initSocket.getId();
-        this.input = '';
-        this.cursorPosition = 0;
-
-        let dockElement = document.createElement("div");
-        dockElement.setAttribute("id", "dock");
-
-        let currElement = document.getElementById(this.socketId);
-        currElement.appendChild(dockElement);
-        this.setInnerHtml();
+        this.dockOnSocketHtml();
     }
 
     /**
@@ -53,7 +43,7 @@ export class Dock {
      * This sets the inner html of the dock to match
      * the input/cursor position
      */
-    private setInnerHtml() {
+    private setInnerHtml(valid: boolean = true) {
         let dock = document.getElementById("dock");
 
         while (dock.firstChild) {
@@ -62,8 +52,12 @@ export class Dock {
 
         const isValidInput = this.socket.isValidSequence(this.input);
 
-        const statusClass = isValidInput ? StatusClass.valid : StatusClass.inProgress;
-        console.log("Puny", statusClass)
+        let statusClass: string;
+        if (valid) {
+            statusClass = isValidInput ? StatusClass.valid : StatusClass.inProgress;
+        } else {
+            statusClass = StatusClass.invalid;
+        }
 
         let input1 = document.createElement("div");
         input1.setAttribute("class", ["input", statusClass].join(' '));
@@ -82,6 +76,30 @@ export class Dock {
         dock.appendChild(input2);
 
         this.restartCursorBlink();
+    }
+
+    /**
+     * Removes the dock from html
+     */
+    removeDockFromSocketHtml() {
+        clearTimeout(this.cursorBlink);
+        const socketElement = document.getElementById(this.socket.getId());
+        while (socketElement.firstChild) {
+            socketElement.removeChild(socketElement.lastChild);
+        }
+    }
+
+    /**
+     * Adds the dock to the currently docked socket
+     */
+    dockOnSocketHtml() {
+        const socketElement = document.getElementById(this.socket.getId());
+        socketElement.innerText = '';
+
+        let dockElement = document.createElement("div");
+        dockElement.setAttribute("id", "dock");
+        socketElement.appendChild(dockElement);
+        this.setInnerHtml();
     }
 
     /**
@@ -106,6 +124,23 @@ export class Dock {
     }
 
     /**
+     * If the sequence is valid, commits the sequence.
+     * Otherwise, sets the sequence as invalid
+     */
+    commitSequence() {
+        if (this.socket.isValidSequence(this.input)) {
+            this.removeDockFromSocketHtml();
+            this.socket.commitSequence(this.input);
+            this.socket = this.socket.getNextSocket();
+            this.input = "";
+            this.cursorPosition = 0;
+            this.dockOnSocketHtml();
+        } else {
+            this.setInnerHtml(false);
+        }
+    }
+
+    /**
      * Goes left by one key (used when arrow key is pressed)
      */
     goLeft() {
@@ -123,13 +158,6 @@ export class Dock {
             this.cursorPosition++;
             this.setInnerHtml();
         }
-    }
-
-    /**
-     * Sets the socket id of the dock
-     */
-    setSocketId(socketId: string) {
-        this.socketId = socketId;
     }
 }
 

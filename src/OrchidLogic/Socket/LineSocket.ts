@@ -1,5 +1,11 @@
 import { Socket } from "./Socket";
+import { firstOrderMap, isSequenceFirstOrder } from "../Structure/FirstOrder/FirstOrderDirectory";
 
+/**
+ * Represents a single line in the editor.  Can
+ * hold a definition, an equality, a relationship,
+ * or something of that nature
+ */
 export class LineSocket extends Socket {
 
     private index: number;
@@ -7,13 +13,16 @@ export class LineSocket extends Socket {
     constructor(domParentId: string, index: number) {
         super(domParentId);
         this.index = index;
+    }
 
-        let thisLine = document.createElement("div");
-        thisLine.setAttribute("id", this.id);
-        thisLine.setAttribute("class", "line");
+    isValidSequence(seq: string): boolean {
+        return isSequenceFirstOrder(seq);
+    }
 
-        const parent = document.getElementById(this.domParentId);
-        parent.appendChild(thisLine);
-        console.log("first");
+    commitSequence(seq: string): void {
+        if (this.isValidSequence(seq)) {
+            const structure = new (firstOrderMap.get(seq))(this);
+            this.childStructure = structure;
+        }
     }
 }

@@ -28,17 +28,11 @@ export class Structure {
     protected readonly id: string;
 
     /**
-     * Id of this structure's parent in the dom
-     */
-    protected readonly domParentId: string;
-
-    /**
      * The structure constructor should both
      * create a new Structure instance, and also
      * populate DOM with html
      */
-    constructor(domParentId: string, parentSocket: Socket) {
-        this.domParentId = domParentId;
+    constructor(parentSocket: Socket) {
         this.parentSocket = parentSocket;
         this.id = v4();
     }
