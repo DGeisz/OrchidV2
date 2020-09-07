@@ -18,7 +18,22 @@ export interface DerivedTermInstance extends TermInstance {
 
 export interface SocketInstance {
     id: string;
-    type: "input" | "term" | "line";
+    type: SocketType;
+    childStructure?: EquationTermType;
 }
 
-export type EquationModelType = TermInstance | TupleInstance | CartesianProductInstance | DerivedTermInstance | SocketInstance;
+export interface TermSocketInstance extends SocketInstance {
+    set: string;
+}
+
+export enum SocketType {
+    input,
+    term,
+    line
+}
+
+export type EquationTermType = TermInstance | TupleInstance | CartesianProductInstance | DerivedTermInstance;
+
+export type EquationModelType = EquationTermType | SocketInstance;
+
+export type EquationPage = EquationModelType[];

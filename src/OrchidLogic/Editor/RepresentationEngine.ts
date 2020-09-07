@@ -1,3 +1,6 @@
+import { EquationPage } from "../Registries/EquationRegistry/EquationTypes";
+import { EditorComplex } from "./EditorComplex";
+
 /**
  * The representation engine is responsible
  * for translating term representation JSON
@@ -5,8 +8,11 @@
  */
 export class RepresentationEngine {
 
-    constructor() {
+    private readonly editorComplex: EditorComplex;
 
+    constructor(initPage: EquationPage, initSocketId: string, editorComplex: EditorComplex) {
+        this.editorComplex = editorComplex;
     }
 
+    
 }
