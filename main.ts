@@ -1,8 +1,8 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 
 require('electron-reload')(__dirname);
 
-function createWindow() {
+async function createWindow() {
     const win = new BrowserWindow({
         width: 1000,
         height: 800,
@@ -12,7 +12,16 @@ function createWindow() {
     });
 
     console.log(__dirname);
-    win.loadFile([__dirname, '/src/Skeleton/index.html'].join('')).catch(e => console.log("Error: ", e));
+    try {
+        await win.loadFile([__dirname, '/src/Skeleton/index.html'].join(''));
+    } catch (e) {
+        console.log("Error:", e);
+    }
 }
+
+ipcMain.on('render-complete', (event => {
+    console.log("Got render!");
+    event.reply('init');
+}));
 
 app.whenReady().then(createWindow);

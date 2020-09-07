@@ -18,6 +18,7 @@ module.exports = {
     resolve: {
         extensions: [ '.tsx', '.ts', '.js' ],
     },
+    target: "electron-renderer",
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'build'),

@@ -22,7 +22,5 @@ export class Term {
         return false;
     }
 
-    populateHtml(parentId: string): void {
-
-    }
+    populateHtml(parentId: string): void {}
 }

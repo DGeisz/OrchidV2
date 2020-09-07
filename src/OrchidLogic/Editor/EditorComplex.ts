@@ -1,5 +1,9 @@
 import { Dock } from "./Dock";
-import { LineSocket } from "../Socket/LineSocket";
+import { TermRegistry } from "../Registries/TermRegistry/TermRegistry";
+import { RuleRegistry } from "../Registries/RuleRegistry/RuleRegistry";
+import { TermAccessorRegistry } from "../Registries/TermAccessorRegistry/TermAccessorRegistry";
+import { RepresentationRegistry } from "../Registries/RepresentationRegistry/RepresentationRegistry";
+import { EquationRegistry } from "../Registries/EquationRegistry/EquationRegistry";
 
 /**
  * The editor complex is the overlord of the
@@ -10,15 +14,24 @@ import { LineSocket } from "../Socket/LineSocket";
 export class EditorComplex {
 
     private readonly dock: Dock;
-    private lines: LineSocket[] = [];
-    private currentLine: LineSocket;
+    private readonly termRegistry: TermRegistry;
+    private readonly ruleRegistry: RuleRegistry;
+    private readonly termAccessorRegistry: TermAccessorRegistry;
+    private readonly representationRegistry: RepresentationRegistry;
+    private readonly equationRegistry: EquationRegistry;
+
 
     constructor() {
-        this.currentLine = new LineSocket("page", 0);
-        this.lines.push(this.currentLine);
+        this.termRegistry = new TermRegistry();
+        this.ruleRegistry = new RuleRegistry();
+        this.termAccessorRegistry = new TermAccessorRegistry();
+        this.representationRegistry = new RepresentationRegistry();
+        this.equationRegistry = new EquationRegistry();
 
-        this.dock = new Dock(this.currentLine);
+        this.dock = new Dock('yeet', this);
     }
+
+    renderInputSeq(input: string, cursorPosition: number): void {}
 
     getDock(): Dock {
         return this.dock;

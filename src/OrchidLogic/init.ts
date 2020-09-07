@@ -1,34 +1,16 @@
+const { ipcRenderer } = require('electron');
+// import { ipcRenderer } from 'electron';
 import { EditorComplex } from "./Editor/EditorComplex";
+import { Controller } from "./Editor/Controller";
 
-let editorComplex = new EditorComplex();
+ipcRenderer.on('init', (event => {
 
-let dock = editorComplex.getDock();
+    console.log("Here it is!");
+    let editorComplex = new EditorComplex();
+    let dock = editorComplex.getDock();
+    const controller = new Controller(dock);
 
-document.addEventListener('keypress', e => {
-    console.log(e.key, e.code);
+}));
 
-    if (e.key.length === 1) {
-        dock.intakeCharacter(e.key);
-    }
-});
+ipcRenderer.send('render-complete');
 
-document.addEventListener('keydown', (e): void => {
-    console.log(e.code, e.key, 'yang');
-
-    switch (e.key) {
-        case "Backspace":
-            dock.deleteCharacter();
-            return;
-        case "ArrowRight":
-            dock.goRight();
-            return;
-        case "ArrowLeft":
-            dock.goLeft();
-            return;
-        case "Enter":
-            dock.commitSequence();
-            return;
-
-
-    }
-});
