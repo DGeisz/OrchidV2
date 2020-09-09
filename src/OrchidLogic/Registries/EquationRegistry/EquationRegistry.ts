@@ -28,4 +28,8 @@ export class EquationRegistry{
 
         return flatPage;
     }
+
+    getCurrentLineId(): string {
+        return this.currentLine.getId();
+    }
 }

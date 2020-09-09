@@ -4,6 +4,7 @@ import { RuleRegistry } from "../Registries/RuleRegistry/RuleRegistry";
 import { TermAccessorRegistry } from "../Registries/TermAccessorRegistry/TermAccessorRegistry";
 import { RepresentationRegistry } from "../Registries/RepresentationRegistry/RepresentationRegistry";
 import { EquationRegistry } from "../Registries/EquationRegistry/EquationRegistry";
+import { RepresentationEngine } from "./RepresentationEngine";
 
 /**
  * The editor complex is the overlord of the
@@ -19,6 +20,7 @@ export class EditorComplex {
     private readonly termAccessorRegistry: TermAccessorRegistry;
     private readonly representationRegistry: RepresentationRegistry;
     private readonly equationRegistry: EquationRegistry;
+    private readonly representationEngine: RepresentationEngine;
 
 
     constructor() {
@@ -27,11 +29,18 @@ export class EditorComplex {
         this.termAccessorRegistry = new TermAccessorRegistry();
         this.representationRegistry = new RepresentationRegistry();
         this.equationRegistry = new EquationRegistry();
+        this.representationEngine = new RepresentationEngine(this.equationRegistry.getFlatPage(), this);
 
-        this.dock = new Dock('yeet', this);
+        this.dock = new Dock(this.equationRegistry.getCurrentLineId(), this);
     }
 
-    renderInputSeq(input: string, cursorPosition: number): void {}
+    getRepresentationEngine(): RepresentationEngine {
+        return this.representationEngine;
+    }
+
+    getRepresentationRegistry(): RepresentationRegistry {
+        return this.representationRegistry;
+    }
 
     getDock(): Dock {
         return this.dock;

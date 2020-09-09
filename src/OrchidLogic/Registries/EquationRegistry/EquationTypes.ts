@@ -1,14 +1,22 @@
 export interface TermInstance {
-    id: string;
-    instanceId: string;
+    id: string; //This is the instance id
+    termId: string;
 }
 
 export interface TupleInstance extends TermInstance {
     items: SocketInstance[];
 }
 
+export function isTuple(node: EquationNodeType): node is TupleInstance {
+    return 'items' in node;
+}
+
 export interface CartesianProductInstance extends TermInstance {
     constituentSets: SocketInstance[];
+}
+
+export function isCartesianProduct(node: EquationNodeType): node is CartesianProductInstance {
+    return 'constituentSets' in node;
 }
 
 export interface DerivedTermInstance extends TermInstance {
@@ -16,10 +24,18 @@ export interface DerivedTermInstance extends TermInstance {
     arg: SocketInstance;
 }
 
+export function isDerivedTerm(node: EquationNodeType): node is DerivedTermInstance {
+    return 'map' in node;
+}
+
 export interface SocketInstance {
     id: string;
     type: SocketType;
     childStructure?: EquationTermType;
+}
+
+export function isSocket(node: EquationNodeType): node is SocketInstance {
+    return 'type' in node;
 }
 
 export interface TermSocketInstance extends SocketInstance {
@@ -34,6 +50,6 @@ export enum SocketType {
 
 export type EquationTermType = TermInstance | TupleInstance | CartesianProductInstance | DerivedTermInstance;
 
-export type EquationModelType = EquationTermType | SocketInstance;
+export type EquationNodeType = EquationTermType | SocketInstance;
 
-export type EquationPage = EquationModelType[];
+export type EquationPage = EquationNodeType[];

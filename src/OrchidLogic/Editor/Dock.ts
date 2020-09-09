@@ -1,4 +1,5 @@
 import { EditorComplex } from "./EditorComplex";
+import { RepresentationEngine } from "./RepresentationEngine";
 
 /**
  * The Dock is the entity that "docks" itself
@@ -14,6 +15,7 @@ export class Dock {
     private socketId: string;
 
     private editorComplex: EditorComplex;
+    private representationEngine: RepresentationEngine;
 
     private input: string = '';
     private cursorPosition: number = 0;
@@ -21,12 +23,14 @@ export class Dock {
     constructor(initSocketId: string, editorComplex: EditorComplex) {
         this.socketId = initSocketId;
         this.editorComplex = editorComplex;
+        this.representationEngine = editorComplex.getRepresentationEngine();
+        this.representationEngine.dockDockInView(initSocketId);
     }
 
     intakeCharacter(char: string) {
         this.input = [this.input.slice(0, this.cursorPosition), char, this.input.slice(this.cursorPosition)].join('');
         this.cursorPosition++;
-        this.editorComplex.renderInputSeq(this.input, this.cursorPosition);
+        this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
     }
 
     /**
@@ -36,7 +40,7 @@ export class Dock {
         this.input = [this.input.slice(0, this.cursorPosition - 1), this.input.slice(this.cursorPosition)].join('');
         if (this.cursorPosition) {
             this.cursorPosition--;
-            this.editorComplex.renderInputSeq(this.input, this.cursorPosition);
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
         }
     }
 
@@ -46,7 +50,7 @@ export class Dock {
     goLeft() {
         if (this.cursorPosition > 0) {
             this.cursorPosition--;
-            this.editorComplex.renderInputSeq(this.input, this.cursorPosition);
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
         }
     }
 
@@ -56,8 +60,15 @@ export class Dock {
     goRight() {
         if (this.cursorPosition < this.input.length) {
             this.cursorPosition++;
-            this.editorComplex.renderInputSeq(this.input, this.cursorPosition);
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
         }
+    }
+
+    /**
+     * Attempts a sequence commit with the bois upstairs
+     */
+    commitSequence() {
+        //TODO: Implement
     }
 }
 

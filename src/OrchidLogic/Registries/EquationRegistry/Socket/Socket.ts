@@ -47,6 +47,10 @@ export class Socket {
         this.parentStructure = structure;
     }
 
+    getId(): string {
+        return this.id;
+    }
+
     toFlatRep(): SocketInstance {
         return {
             id: this.id,
