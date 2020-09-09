@@ -2,6 +2,7 @@ import { EquationNodeType, EquationPage, isSocket } from "../Registries/Equation
 import { EditorComplex } from "./EditorComplex";
 import { RepresentationRegistry } from "../Registries/RepresentationRegistry/RepresentationRegistry";
 import { RepresentationTemplate } from "../Registries/RepresentationRegistry/RepresentationTypes";
+import { EquationRegistry } from "../Registries/EquationRegistry/EquationRegistry";
 
 /**
  * The representation engine is responsible
@@ -12,12 +13,14 @@ export class RepresentationEngine {
 
     private readonly editorComplex: EditorComplex;
     private readonly representationRegistry: RepresentationRegistry;
+    private readonly equationRegistry: EquationRegistry;
 
     private cursorBlink: NodeJS.Timeout;
 
     constructor(initPage: EquationPage, editorComplex: EditorComplex) {
         this.editorComplex = editorComplex;
         this.representationRegistry = editorComplex.getRepresentationRegistry();
+        this.equationRegistry = editorComplex.getEquationRegistry();
 
         for (let lineSocket of initPage) {
             this.appendEquationRepresentation('page', lineSocket);
@@ -73,7 +76,7 @@ export class RepresentationEngine {
             dock.removeChild(dock.lastChild);
         }
 
-        const isValidInput = this.editorComplex.isValidSequence(input);
+        const isValidInput = this.equationRegistry.isValidInput(input);
 
         let statusClass = isValidInput ? StatusClass.valid : StatusClass.inProgress;
 

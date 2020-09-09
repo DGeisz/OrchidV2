@@ -25,6 +25,7 @@ export class Dock {
         this.editorComplex = editorComplex;
         this.representationEngine = editorComplex.getRepresentationEngine();
         this.representationEngine.dockDockInView(initSocketId);
+        this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
     }
 
     intakeCharacter(char: string) {

@@ -42,6 +42,10 @@ export class EditorComplex {
         return this.representationRegistry;
     }
 
+    getEquationRegistry(): EquationRegistry {
+        return this.equationRegistry;
+    }
+
     getDock(): Dock {
         return this.dock;
     }
