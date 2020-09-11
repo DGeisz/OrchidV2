@@ -34,6 +34,18 @@ export class EditorComplex {
         this.dock = new Dock(this.equationRegistry.getCurrentLineId(), this);
     }
 
+    /**
+     * Attempts to commit a sequence.  First return arg is
+     * whether the commit was successful.  Second return arg
+     * is the id of the active socket
+     */
+    commitSequence(seq: string): [boolean, string] {
+        if (this.equationRegistry.isValidInput(seq)) {
+
+        }
+        return [false, ''];
+    }
+
     getRepresentationEngine(): RepresentationEngine {
         return this.representationEngine;
     }

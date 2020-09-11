@@ -3,6 +3,7 @@ import { EditorComplex } from "./EditorComplex";
 import { RepresentationRegistry } from "../Registries/RepresentationRegistry/RepresentationRegistry";
 import { RepresentationTemplate } from "../Registries/RepresentationRegistry/RepresentationTypes";
 import { EquationRegistry } from "../Registries/EquationRegistry/EquationRegistry";
+import { stripSlash } from "./utils/functions";
 
 /**
  * The representation engine is responsible
@@ -69,7 +70,7 @@ export class RepresentationEngine {
      * Renders the input within the dock element
      * on the page
      */
-    renderInputSeq(input: string, cursorPosition: number) {
+    renderInputSeq(input: string, cursorPosition: number, failedCommit: boolean = false) {
         let dock = document.getElementById("dock");
 
         while (dock.firstChild) {
@@ -78,10 +79,18 @@ export class RepresentationEngine {
 
         const isValidInput = this.equationRegistry.isValidInput(input);
 
-        let statusClass = isValidInput ? StatusClass.valid : StatusClass.inProgress;
+
+        let statusClass;
+        if (failedCommit) {
+            statusClass = StatusClass.invalid;
+        } else {
+            statusClass = isValidInput ? StatusClass.valid : StatusClass.inProgress;
+        }
+
+        const italic = stripSlash(input)[0] ? '' : 'italic';
 
         let input1 = document.createElement("div");
-        input1.setAttribute("class", ["input", statusClass].join(' '));
+        input1.setAttribute("class", ["input", statusClass, italic].join(' '));
         input1.innerText = input.slice(0, cursorPosition);
         let cursorContainer = document.createElement("div");
         cursorContainer.setAttribute("id", "cursorContainer");
@@ -89,7 +98,7 @@ export class RepresentationEngine {
         cursor.setAttribute("id", "cursor");
         cursorContainer.appendChild(cursor);
         let input2 = document.createElement("div");
-        input2.setAttribute("class", ["input", statusClass].join(' '));
+        input2.setAttribute("class", ["input", statusClass, italic].join(' '));
         input2.innerText = input.slice(cursorPosition);
 
         dock.appendChild(input1);

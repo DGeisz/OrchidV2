@@ -24,4 +24,16 @@ export class RepresentationRegistry{
             children: []
         }
     }
+
+    getRepresentationTemplate(id: string): RepresentationTemplate {
+
+
+
+        return {
+            id: '',
+            elementType: 'div',
+            class: '',
+            children: []
+        }
+    }
 }

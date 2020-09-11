@@ -2,6 +2,7 @@ import { EquationPage, SocketInstance } from "./EquationTypes";
 import { LineSocket } from "./Socket/LineSocket";
 import { Socket } from "./Socket/Socket";
 import { builtInLineStarters } from "../../Editor/BuiltIns";
+import { stripSlash } from "../../Editor/utils/functions";
 
 /**
  * Abstract representation of all equations on
@@ -37,11 +38,13 @@ export class EquationRegistry{
         return this.currentLine.getId();
     }
 
-    isValidInput(input: string): boolean {
-        console.log("Yang")
+    isValidInput(rawInput: string): boolean {
         if (this.currentSocket instanceof LineSocket) {
-            console.log("Ypte")
-            return input in builtInLineStarters;
+            const [isAccessor, input] = stripSlash(rawInput);
+            if (isAccessor) {
+                return input in builtInLineStarters;
+            }
+            return false;
         }
         return false;
     }
