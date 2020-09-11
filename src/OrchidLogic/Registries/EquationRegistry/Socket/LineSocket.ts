@@ -1,5 +1,5 @@
 import { Socket } from "./Socket";
-import { SocketInstance, SocketType } from "../EquationTypes";
+import { SocketInstance } from "../EquationTypes";
 
 export class LineSocket extends Socket {
    constructor() {
@@ -9,7 +9,8 @@ export class LineSocket extends Socket {
    toFlatRep(): SocketInstance {
        return {
            id: this.id,
-           type: SocketType.line
+           type: 'socket',
+           socketType: 'line'
        }
    }
 }

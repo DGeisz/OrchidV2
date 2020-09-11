@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
-import { Structure } from "../../../../Junk/Structure/Structure";
-import { SocketInstance, SocketType } from "../EquationTypes";
+import { SocketInstance } from "../EquationTypes";
+import { Structure } from "../Structure/Structure";
 
 export class Socket {
     protected readonly id: string;
@@ -54,7 +54,8 @@ export class Socket {
     toFlatRep(): SocketInstance {
         return {
             id: this.id,
-            type: SocketType.input,
+            type: 'socket',
+            socketType: 'line'
         }
     }
 }

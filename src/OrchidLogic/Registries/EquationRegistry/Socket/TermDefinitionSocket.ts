@@ -1,16 +1,18 @@
 import { Socket } from "./Socket";
+import { Structure } from "../Structure/Structure";
 import { SocketInstance } from "../EquationTypes";
 
-export class TermSocket extends Socket {
-    constructor() {
+export class TermDefinitionSocket extends Socket {
+    constructor(structure: Structure) {
         super();
+        this.setParentStructure(structure);
     }
 
     toFlatRep(): SocketInstance {
         return {
             id: this.id,
             type: 'socket',
-            socketType: 'term'
+            socketType: 'termDef'
         }
     }
 }

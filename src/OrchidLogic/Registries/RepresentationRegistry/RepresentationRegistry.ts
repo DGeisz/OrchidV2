@@ -1,5 +1,5 @@
-import { SocketInstance } from "../EquationRegistry/EquationTypes";
-import { RepresentationTemplate } from "./RepresentationTypes";
+import { EquationNodeInstance, isSetDef, isSocket, isTerm, SocketInstance } from "../EquationRegistry/EquationTypes";
+import { EquationToTemplateMapping, RepresentationTemplate } from "./RepresentationTypes";
 
 /**
  * Registry of the encoded formats for
@@ -7,12 +7,25 @@ import { RepresentationTemplate } from "./RepresentationTypes";
  */
 export class RepresentationRegistry{
 
-    getSocketTemplate(socketInstance: SocketInstance): RepresentationTemplate {
-        return {
-            id: socketInstance.id,
-            elementType: 'div',
-            class: ['socket', socketInstance.type].join(' '),
-            children: []
+    private equationMappings: Map<string, EquationToTemplateMapping[]>;
+
+    constructor() {
+        this.equationMappings = new Map<string, EquationToTemplateMapping[]>();
+    }
+
+
+    getNodeTemplate(node: EquationNodeInstance): RepresentationTemplate {
+        if (isSocket(node)) {
+            return {
+                id: node.id,
+                elementType: 'div',
+                class: ['socket', node.socketType].join(' '),
+                children: []
+            }
+        } else if (isTerm(node)) {
+
+        } else {
+
         }
     }
 
@@ -26,9 +39,6 @@ export class RepresentationRegistry{
     }
 
     getRepresentationTemplate(id: string): RepresentationTemplate {
-
-
-
         return {
             id: '',
             elementType: 'div',

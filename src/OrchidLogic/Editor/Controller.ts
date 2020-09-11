@@ -8,16 +8,12 @@ import { Dock } from "./Dock";
 export class Controller {
     constructor(dock: Dock) {
         document.addEventListener('keypress', e => {
-            console.log(e.key, e.code);
-
             if (e.key.length === 1) {
                 dock.intakeCharacter(e.key);
             }
         });
 
         document.addEventListener('keydown', (e): void => {
-            console.log(e.code, e.key, 'yang');
-
             switch (e.key) {
                 case "Backspace":
                     dock.deleteCharacter();

@@ -1,3 +1,5 @@
+import { EquationNodeShape } from "../EquationRegistry/EquationTypes";
+
 /**
  * This is an editor specific format.
  * In this case, the view is represented
@@ -13,4 +15,16 @@ export interface RepresentationTemplate {
     class: string;
     innerText?: string;
     children: RepresentationTemplate[];
+}
+
+
+/**
+ * This provides the customizable mapping between
+ * some equation node structure and it's corresponding
+ * representation template
+ */
+export interface EquationToTemplateMapping {
+    equation: EquationNodeShape;
+    template: RepresentationTemplate;
+    depth: number;
 }

@@ -41,7 +41,13 @@ export class EditorComplex {
      */
     commitSequence(seq: string): [boolean, string] {
         if (this.equationRegistry.isValidInput(seq)) {
+            const currSocketId = this.equationRegistry.getCurrentSocketId();
+            const flatRep = this.equationRegistry.commitSeqReturnFlat(seq);
 
+            this.representationEngine.removeDock(currSocketId);
+            this.representationEngine.appendEquationRepresentation(currSocketId, flatRep);
+
+            return [true, this.equationRegistry.getCurrentLineId()];
         }
         return [false, ''];
     }

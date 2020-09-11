@@ -69,7 +69,7 @@ export class Dock {
      * Attempts a sequence commit with the bois upstairs
      */
     commitSequence() {
-        const [success, newId] = this.editorComplex.commitSequence();
+        const [success, newId] = this.editorComplex.commitSequence(this.input);
         if (success) {
 
         } else {

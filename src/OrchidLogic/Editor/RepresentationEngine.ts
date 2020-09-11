@@ -1,4 +1,4 @@
-import { EquationNodeType, EquationPage, isSocket } from "../Registries/EquationRegistry/EquationTypes";
+import { EquationNodeInstance, EquationPage, isSocket } from "../Registries/EquationRegistry/EquationTypes";
 import { EditorComplex } from "./EditorComplex";
 import { RepresentationRegistry } from "../Registries/RepresentationRegistry/RepresentationRegistry";
 import { RepresentationTemplate } from "../Registries/RepresentationRegistry/RepresentationTypes";
@@ -28,14 +28,19 @@ export class RepresentationEngine {
         }
     }
 
-    appendEquationRepresentation(parentId: string, node: EquationNodeType) {
+    appendEquationRepresentation(parentId: string, node: EquationNodeInstance) {
         if (isSocket(node)) {
             this.recursivelyAppendDom(
                 parentId,
-                this.representationRegistry.getSocketTemplate(node)
+                this.representationRegistry.getNodeTemplate(node)
             );
 
             node.childStructure && this.appendEquationRepresentation(node.id, node.childStructure);
+        } else {
+            this.recursivelyAppendDom(
+                parentId,
+                this.representationRegistry.getNodeTemplate(node)
+            );
         }
     }
 
@@ -47,8 +52,12 @@ export class RepresentationEngine {
         const parentElement = document.getElementById(parentId);
         parentElement.appendChild(newElement);
 
-        for (let childTemplate of template.children) {
-            this.recursivelyAppendDom(template.id, childTemplate);
+        if (template.innerText) {
+            newElement.innerText = template.innerText;
+        } else {
+            for (let childTemplate of template.children) {
+                this.recursivelyAppendDom(template.id, childTemplate);
+            }
         }
     }
 
@@ -64,6 +73,16 @@ export class RepresentationEngine {
         this.recursivelyAppendDom(socketId, this.representationRegistry.getDockTemplate())
     }
 
+    /**
+     * Removes the dock from a particular socket
+     */
+    removeDock(socketId: string) {
+        const socket = document.getElementById(socketId);
+
+        while (socket.firstChild) {
+            socket.removeChild(socket.lastChild);
+        }
+    }
 
 
     /**

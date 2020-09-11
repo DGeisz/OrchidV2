@@ -1,8 +1,9 @@
-import { EquationPage, SocketInstance } from "./EquationTypes";
+import { EquationNodeInstance, EquationPage, SocketInstance } from "./EquationTypes";
 import { LineSocket } from "./Socket/LineSocket";
 import { Socket } from "./Socket/Socket";
 import { builtInLineStarters } from "../../Editor/BuiltIns";
 import { stripSlash } from "../../Editor/utils/functions";
+import { SetDefStructure } from "./Structure/SetDefStructure";
 
 /**
  * Abstract representation of all equations on
@@ -24,6 +25,41 @@ export class EquationRegistry{
         }
     }
 
+    isValidInput(rawInput: string): boolean {
+        if (this.currentSocket instanceof LineSocket) {
+            const [isAccessor, input] = stripSlash(rawInput);
+            if (isAccessor) {
+                return input in builtInLineStarters;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * Commits the structure corresponding to this sequence into
+     * the current equation, and returns the information necessary
+     * to brew the representation
+     */
+    commitSeqReturnFlat(seq: string): EquationNodeInstance {
+        if (this.isValidInput(seq)) {
+            if (this.currentSocket instanceof LineSocket) {
+                switch (seq) {
+                    case builtInLineStarters.set:
+                        const newSet = new SetDefStructure(this.currentSocket);
+                        this.currentSocket = this.currentSocket.getNextSocket();
+                        return newSet.toFlatRep();
+
+                    case builtInLineStarters.term:
+                }
+            }
+        }
+        return {
+            id: '',
+            type: 'set'
+        }
+    }
+
     getFlatPage(): SocketInstance[] {
         let flatPage: SocketInstance[] = [];
 
@@ -38,14 +74,9 @@ export class EquationRegistry{
         return this.currentLine.getId();
     }
 
-    isValidInput(rawInput: string): boolean {
-        if (this.currentSocket instanceof LineSocket) {
-            const [isAccessor, input] = stripSlash(rawInput);
-            if (isAccessor) {
-                return input in builtInLineStarters;
-            }
-            return false;
-        }
-        return false;
+    getCurrentSocketId(): string {
+        return this.currentSocket.getId();
     }
+
+
 }
