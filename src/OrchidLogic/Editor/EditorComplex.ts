@@ -44,10 +44,15 @@ export class EditorComplex {
             const currSocketId = this.equationRegistry.getCurrentSocketId();
             const flatRep = this.equationRegistry.commitSeqReturnFlat(seq);
 
+            console.log("Midway!", currSocketId, flatRep);
+
             this.representationEngine.removeDock(currSocketId);
             this.representationEngine.appendEquationRepresentation(currSocketId, flatRep);
 
-            return [true, this.equationRegistry.getCurrentLineId()];
+            const newSocketId = this.equationRegistry.getCurrentSocketId();
+            this.representationEngine.dockDockInView(newSocketId);
+
+            return [true, newSocketId];
         }
         return [false, ''];
     }

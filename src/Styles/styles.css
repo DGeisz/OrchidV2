@@ -23,6 +23,8 @@ div {
 .socket {
     display: -webkit-flex;
     flex-direction: row;
+    justify-content: center;
+    background-color: rgba(255, 0, 0, 0.2);
 }
 
 .input {

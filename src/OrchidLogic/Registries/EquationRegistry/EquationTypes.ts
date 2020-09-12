@@ -89,6 +89,7 @@ export function isDerivedTerm(node: EquationNodeInstance): node is DerivedTermIn
 
 export interface SocketInstance extends NodeInstance {
     type: 'socket';
+    index: number;
     childStructure?: EquationTermInstance;
     socketType: 'termDef' | 'term' | 'line';
 }
@@ -111,6 +112,10 @@ export interface TermSocketInstance extends SocketInstance {
 export interface TermSocketShape extends SocketShape {
     socketType: 'term';
     set: string;
+}
+
+export function isTermSocket(node: EquationNodeInstance): node is TermSocketInstance {
+    return 'set' in node;
 }
 
 export type EquationTermInstance = TermInstance | TupleInstance | CartesianProductInstance | DerivedTermInstance;

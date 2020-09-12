@@ -8,6 +8,8 @@ export class Socket {
     protected nextSocket: Socket | null = null;
     protected prevSocket: Socket | null = null;
 
+    protected index: number;
+
     /**
      * Underlying parent of the socket, if any
      */
@@ -19,6 +21,7 @@ export class Socket {
     protected childStructure: Structure | null = null;
 
     constructor() {
+        this.index = 0;
         this.id = v4();
     }
 
@@ -40,7 +43,7 @@ export class Socket {
 
     syncWithNextSocket(socket: Socket): void {
         this.setNextSocket(socket);
-        socket.setPrevSocket(this);
+        socket && socket.setPrevSocket(this);
     }
 
     setParentStructure(structure: Structure): void {
@@ -54,6 +57,7 @@ export class Socket {
     toFlatRep(): SocketInstance {
         return {
             id: this.id,
+            index: this.index,
             type: 'socket',
             socketType: 'line'
         }

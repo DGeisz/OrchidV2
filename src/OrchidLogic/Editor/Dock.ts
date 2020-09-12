@@ -2,14 +2,11 @@ import { EditorComplex } from "./EditorComplex";
 import { RepresentationEngine } from "./RepresentationEngine";
 
 /**
- * The Dock is the entity that "docks" itself
- * to a socket, takes input from a user, determines
- * whether that input corresponds to a structure
- * that is valid within the given socket, either for
- * a mathematical or managerial reason, and coordinates the
- * process of translating that textual input into a structure
- * both from the perspective of a TypeScript object, but also
- * as pure html rendered in the app
+ * The Dock is the abstraction that
+ * handles user input into a particular
+ * socket.  The representationEngine of course
+ * does the representing, but the dock coordinates
+ * what the repEngine projects onto the view
  */
 export class Dock {
     private socketId: string;
@@ -71,7 +68,10 @@ export class Dock {
     commitSequence() {
         const [success, newId] = this.editorComplex.commitSequence(this.input);
         if (success) {
-
+            this.socketId = newId;
+            this.input = '';
+            this.cursorPosition = 0;
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
         } else {
             this.representationEngine.renderInputSeq(this.input, this.cursorPosition, true);
         }

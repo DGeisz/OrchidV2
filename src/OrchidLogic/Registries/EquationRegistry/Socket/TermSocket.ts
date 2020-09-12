@@ -9,6 +9,7 @@ export class TermSocket extends Socket {
     toFlatRep(): SocketInstance {
         return {
             id: this.id,
+            index: this.index,
             type: 'socket',
             socketType: 'term'
         }

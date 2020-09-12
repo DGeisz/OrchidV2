@@ -16,6 +16,7 @@ export class SetDefStructure extends Structure {
         defSocket.syncWithNextSocket(nextSocket);
     }
 
+
     toFlatRep(): EquationStructureInstance {
         return {
             id: this.id,

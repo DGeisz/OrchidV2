@@ -1,4 +1,9 @@
-import { EquationNodeInstance, EquationPage, isSocket } from "../Registries/EquationRegistry/EquationTypes";
+import {
+    EquationNodeInstance,
+    EquationNodeShape,
+    EquationPage, isDerivedTerm, isSetDef,
+    isSocket, isTuple
+} from "../Registries/EquationRegistry/EquationTypes";
 import { EditorComplex } from "./EditorComplex";
 import { RepresentationRegistry } from "../Registries/RepresentationRegistry/RepresentationRegistry";
 import { RepresentationTemplate } from "../Registries/RepresentationRegistry/RepresentationTypes";
@@ -29,18 +34,75 @@ export class RepresentationEngine {
     }
 
     appendEquationRepresentation(parentId: string, node: EquationNodeInstance) {
-        if (isSocket(node)) {
+
+        //Handle the most difficult case, which is if the term is derived
+        if (isDerivedTerm(node)) {
+
+            const index2IdMap = new Map<number, string>([
+                [node.arg.index, node.arg.id],
+                [node.map.index, node.map.id]
+            ]);
+
+            if (node.arg.childStructure && isTuple(node.arg.childStructure)) {
+
+                for (let childNode of node.arg.childStructure.items) {
+                    index2IdMap.set(childNode.index, childNode.id);
+                }
+
+                const [isCustom, template] = this.representationRegistry.getMultiArgMapTemplate(node, index2IdMap);
+
+                this.recursivelyAppendDom(parentId, template);
+
+                if (!isCustom && node.map.childStructure) {
+                    this.appendEquationRepresentation(
+                        node.map.id,
+                        node.map.childStructure
+                    );
+                }
+
+                for (let childNode of node.arg.childStructure.items) {
+                    this.appendEquationRepresentation(
+                        node.id,
+                        childNode
+                    );
+                }
+            } else {
+                const [isCustom, template] = this.representationRegistry.getMapTemplate(node, index2IdMap);
+                this.recursivelyAppendDom(
+                    parentId,
+                    template
+                );
+
+                if (!isCustom && node.map.childStructure) {
+                    this.appendEquationRepresentation(
+                        node.map.id,
+                        node.map.childStructure
+                    );
+                }
+
+                node.arg.childStructure && this.appendEquationRepresentation(
+                    node.arg.id,
+                    node.arg.childStructure
+                );
+            }
+        } else if (isSocket(node)) {
+            //This case is somewhat rare because typically sockets are taken care of as part of another structure
             this.recursivelyAppendDom(
                 parentId,
-                this.representationRegistry.getNodeTemplate(node)
+                this.representationRegistry.getSocketTemplate(node)
+            );
+            node.childStructure && this.appendEquationRepresentation(node.id, node.childStructure);
+        } else if (isSetDef(node)) {
+            const index2IdMap = new Map<number, string>([[node.newSet.index, node.newSet.id]]);
+
+            this.recursivelyAppendDom(
+                parentId,
+                this.representationRegistry.getBuiltInTemplate(node, index2IdMap)
             );
 
-            node.childStructure && this.appendEquationRepresentation(node.id, node.childStructure);
+            node.newSet.childStructure && this.appendEquationRepresentation(node.newSet.id, node.newSet.childStructure);
         } else {
-            this.recursivelyAppendDom(
-                parentId,
-                this.representationRegistry.getNodeTemplate(node)
-            );
+
         }
     }
 
@@ -54,6 +116,8 @@ export class RepresentationEngine {
 
         if (template.innerText) {
             newElement.innerText = template.innerText;
+            console.log("Appended", template.innerText, "To node!");
+
         } else {
             for (let childTemplate of template.children) {
                 this.recursivelyAppendDom(template.id, childTemplate);
@@ -78,6 +142,7 @@ export class RepresentationEngine {
      */
     removeDock(socketId: string) {
         const socket = document.getElementById(socketId);
+        clearTimeout(this.cursorBlink);
 
         while (socket.firstChild) {
             socket.removeChild(socket.lastChild);

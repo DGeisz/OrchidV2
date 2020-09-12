@@ -11,6 +11,7 @@ export class TermDefinitionSocket extends Socket {
     toFlatRep(): SocketInstance {
         return {
             id: this.id,
+            index: this.index,
             type: 'socket',
             socketType: 'termDef'
         }

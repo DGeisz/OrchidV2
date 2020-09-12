@@ -41,11 +41,13 @@ export class EquationRegistry{
      * the current equation, and returns the information necessary
      * to brew the representation
      */
-    commitSeqReturnFlat(seq: string): EquationNodeInstance {
-        if (this.isValidInput(seq)) {
+    commitSeqReturnFlat(rawSeq: string): EquationNodeInstance {
+        if (this.isValidInput(rawSeq)) {
+            const [_, seq] = stripSlash(rawSeq);
             if (this.currentSocket instanceof LineSocket) {
                 switch (seq) {
                     case builtInLineStarters.set:
+                        console.log("Inside set!");
                         const newSet = new SetDefStructure(this.currentSocket);
                         this.currentSocket = this.currentSocket.getNextSocket();
                         return newSet.toFlatRep();

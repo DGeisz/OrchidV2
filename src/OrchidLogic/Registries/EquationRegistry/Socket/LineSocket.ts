@@ -9,6 +9,7 @@ export class LineSocket extends Socket {
    toFlatRep(): SocketInstance {
        return {
            id: this.id,
+           index: this.index,
            type: 'socket',
            socketType: 'line'
        }

@@ -1,6 +1,6 @@
 import { Socket } from "../Socket/Socket";
 import { v4 } from 'uuid';
-import { EquationStructureType } from "../EquationTypes";
+import { EquationStructureInstance } from "../EquationTypes";
 
 
 /**
@@ -42,7 +42,7 @@ export class Structure {
     /**
      * Returns the flat representation of this structure
      */
-    toFlatRep(): EquationStructureType {
+    toFlatRep(): EquationStructureInstance {
         return {
             id: '',
             type: 'term',
