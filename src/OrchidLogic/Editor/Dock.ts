@@ -71,6 +71,7 @@ export class Dock {
             this.socketId = newId;
             this.input = '';
             this.cursorPosition = 0;
+            this.representationEngine.dockDockInView(this.socketId);
             this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
         } else {
             this.representationEngine.renderInputSeq(this.input, this.cursorPosition, true);

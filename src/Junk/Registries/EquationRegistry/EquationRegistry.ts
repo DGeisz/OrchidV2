@@ -1,9 +1,10 @@
 import { EquationNodeInstance, EquationPage, SocketInstance } from "./EquationTypes";
 import { LineSocket } from "./Socket/LineSocket";
 import { Socket } from "./Socket/Socket";
-import { builtInLineStarters } from "../../Editor/BuiltIns";
-import { stripSlash } from "../../Editor/utils/functions";
+import { builtInLineStarters } from "../../../OrchidLogic/Editor/BuiltIns";
+import { stripSlash } from "../../../OrchidLogic/Editor/utils/functions";
 import { SetDefStructure } from "./Structure/SetDefStructure";
+import { TermDefinitionSocket } from "./Socket/TermDefinitionSocket";
 
 /**
  * Abstract representation of all equations on
@@ -26,12 +27,15 @@ export class EquationRegistry{
     }
 
     isValidInput(rawInput: string): boolean {
+        const [isAccessor, input] = stripSlash(rawInput);
         if (this.currentSocket instanceof LineSocket) {
-            const [isAccessor, input] = stripSlash(rawInput);
             if (isAccessor) {
                 return input in builtInLineStarters;
             }
             return false;
+        } else if (this.currentSocket instanceof TermDefinitionSocket) {
+            return !isAccessor;
+
         }
         return false;
     }

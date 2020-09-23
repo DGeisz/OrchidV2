@@ -15,4 +15,3 @@ export interface DerivedTerm extends Term {
     map: string; //The map that created this term
     arg: string; //id of the term that is the argument of the function
 }
-
