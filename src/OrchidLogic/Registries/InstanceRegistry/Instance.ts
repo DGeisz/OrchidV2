@@ -1,7 +1,14 @@
 import { v4 } from 'uuid';
 import { BattleMap } from "../../BattleMap/BattleMap";
 import { InstanceType } from "./FlatInstanceTypes";
+import { builtInQuivers } from "../../BattleMap/BuiltInQuivers";
+import { parseBoolean } from "../../utils/functions";
+import { InstanceRegistry } from "./InstanceRegistry";
 
+/**
+ * Essentially the middle man between the quiver representation
+ * of an instance and the various registries and editor complex.
+ */
 export class Instance {
     private readonly id: string;
 
@@ -11,14 +18,17 @@ export class Instance {
 
     //References to higher structures
     private readonly battleMap: BattleMap;
+    private readonly instanceRegistry: InstanceRegistry;
 
     //Quiver properties of the instance
-    private type: 'derived' | 'tuple' | 'basic';
     private isRepresented: boolean; //Is there a corresponding view to this instance (not the case for custom maps with tuple args)
     private isFilled: boolean; //If this is represented, has it's representation been filled out, ie, has the "socket" been filled
 
-    constructor() {
+    constructor(instanceRegistry: InstanceRegistry, isRepresented?: boolean) {
         this.id = v4();
+        this.instanceRegistry = instanceRegistry;
+        this.isRepresented = typeof isRepresented === "undefined" ? true : isRepresented;
+        this.isFilled = false;
     }
 
     getId(): string {
@@ -26,11 +36,89 @@ export class Instance {
     }
 
     getFlatRep(): InstanceType {
-        switch (this.type) {
-            case "basic":
+        this.isFilled = true;
+        const { exists: derivedExists, target: derivedTarget } = this.battleMap.sq2t(this.id, builtInQuivers.isDerived);
 
-            case "derived":
-            case "tuple":
+        if (derivedExists && parseBoolean(derivedTarget)) {
+            const {exists: mapExists, target: mapTarget} = this.battleMap.sq2t(this.id, builtInQuivers.map);
+            const {exists: argExists, target: argTarget} = this.battleMap.sq2t(this.id, builtInQuivers.arg);
+
+            if (mapExists && argExists) {
+                const mapInstance = this.instanceRegistry.getInstance(mapTarget);
+                const argInstance = this.instanceRegistry.getInstance(argTarget);
+
+                if (!(mapInstance || argInstance)) {
+                    throw new Error("Map and arg targets of derived quiver in battle map, but not in instance registry");
+                }
+                return {
+                    id: this.id,
+                    map: mapInstance.getFlatRep(),
+                    arg: argInstance.getFlatRep(),
+                    isRepresented: this.isRepresented
+                }
+            } else {
+                throw new Error("Instance quiver is derived, but doesn't have a map or arg in the battle map");
+            }
+        }
+
+        const { exists: tupleExists, target: tupleTarget } = this.battleMap.sq2t(this.id, builtInQuivers.isTuple);
+
+        if (tupleExists && parseBoolean(tupleTarget)) {
+            const {exists: sizeExists, target: sizeTarget} = this.battleMap.sq2t(this.id, builtInQuivers.tupleSize);
+            const size = parseInt(sizeTarget);
+
+            if (!sizeExists) {
+                throw new Error("Tuple quiver doesn't have defined size");
+            } else if (isNaN(size)) {
+                throw new Error("Tuple size is NaN");
+            }
+
+            const items: InstanceType[] = [];
+
+            for (let i = 0; i < size; i++) {
+                const { exists: indexExists, target: indexTarget } = this.battleMap.sq2t(this.id, [builtInQuivers.index, i].join(''));
+
+                if (!indexExists) {
+                    throw new Error(`Tuple doesn't have quiver in battle at index ${i}`);
+                }
+
+                const indexInstance = this.instanceRegistry.getInstance(indexTarget);
+
+                if (typeof indexTarget === 'undefined') {
+                    throw new Error(`Index instance of tuple defined in battle, but not in instanceRegistry`);
+                }
+
+                items.push(indexInstance.getFlatRep());
+            }
+
+            return {
+                id: this.id,
+                isRepresented: this.isRepresented,
+                items: items
+            }
+        }
+
+        const { exists: leafExists, target: leafTarget } = this.battleMap.sq2t(this.id, builtInQuivers.isLeaf);
+
+        if (leafExists && parseBoolean(leafTarget)) {
+            const { exists: iOfExists, target: iOf } = this.battleMap.sq2t(this.id, builtInQuivers.iOf);
+
+            if (!iOfExists) {
+                throw new Error("Instance is leaf, but doesn't have an iOf in battle");
+            }
+
+            return {
+                id: this.id,
+                isRepresented: this.isRepresented,
+                iOf: iOf
+            }
+        }
+
+        this.isFilled = false;
+
+        return {
+            id: this.id,
+            isRepresented: this.isRepresented
         }
     }
 }

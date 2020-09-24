@@ -8,3 +8,9 @@ export function stripSlash(rawInput: string): [boolean, string] {
     }
     return [false, rawInput];
 }
+
+/**
+ * Basically parseInt for boolean*/
+export function parseBoolean(input: string): boolean {
+    return input === 'true';
+}

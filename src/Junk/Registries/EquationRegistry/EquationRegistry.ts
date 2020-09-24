@@ -2,7 +2,7 @@ import { EquationNodeInstance, EquationPage, SocketInstance } from "./EquationTy
 import { LineSocket } from "./Socket/LineSocket";
 import { Socket } from "./Socket/Socket";
 import { builtInLineStarters } from "../../../OrchidLogic/Editor/BuiltIns";
-import { stripSlash } from "../../../OrchidLogic/Editor/utils/functions";
+import { stripSlash } from "../../../OrchidLogic/utils/functions";
 import { SetDefStructure } from "./Structure/SetDefStructure";
 import { TermDefinitionSocket } from "./Socket/TermDefinitionSocket";
 
