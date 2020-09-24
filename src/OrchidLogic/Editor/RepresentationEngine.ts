@@ -1,11 +1,99 @@
-import type { PageType } from "../Registries/InstanceRegistry/FlatInstanceTypes";
+import type { InstanceType, PageType } from "../Registries/InstanceRegistry/FlatInstanceTypes";
+import { RepresentationTemplate } from "../Registries/RepresentationRegistry/RepresentationTypes";
+import { builtInViewIds } from "./BuiltIns";
+import { stripSlash } from "../utils/functions";
+import { RepresentationRegistry } from "../Registries/RepresentationRegistry/RepresentationRegistry";
 
 export class RepresentationEngine {
+    private representationRegistry: RepresentationRegistry;
 
-    constructor(initPage: PageType) {
+    private cursorBlink: NodeJS.Timeout;
+
+    constructor(initPage: PageType, representationRegistry: RepresentationRegistry) {
+        this.representationRegistry = representationRegistry;
+
+        for (let line of initPage) {
+            this.appendRepresentation(builtInViewIds.page, line);
+        }
+    }
+
+    appendRepresentation(parentId: string, flatRep: InstanceType) {
 
     }
+
+    private recursivelyAppendDom(parentId: string, template: RepresentationTemplate) {
+
+        const newElement = document.createElement(template.elementType);
+        newElement.setAttribute('id', template.id);
+        newElement.setAttribute('class', template.class);
+
+        const parentElement = document.getElementById(parentId);
+        parentElement.appendChild(newElement);
+
+        if (template.innerText) {
+            newElement.innerText = template.innerText;
+            console.log("Appended", template.innerText, "To node!");
+
+        } else {
+            for (let childTemplate of template.children) {
+                this.recursivelyAppendDom(template.id, childTemplate);
+            }
+        }
+    }
+    /**
+     * Renders the input within the dock element
+     * on the page
+     */
+    renderInputSeq(input: string, cursorPosition: number, statusClass: keyof typeof StatusClass) {
+        let dock = document.getElementById("dock");
+
+        while (dock.firstChild) {
+            dock.removeChild(dock.lastChild);
+        }
+
+        const italic = stripSlash(input)[0] ? '' : 'italic';
+
+        let input1 = document.createElement("div");
+        input1.setAttribute("class", ["input", statusClass, italic].join(' '));
+        input1.innerText = input.slice(0, cursorPosition);
+        let cursorContainer = document.createElement("div");
+        cursorContainer.setAttribute("id", "cursorContainer");
+        let cursor = document.createElement("div");
+        cursor.setAttribute("id", "cursor");
+        cursorContainer.appendChild(cursor);
+        let input2 = document.createElement("div");
+        input2.setAttribute("class", ["input", statusClass, italic].join(' '));
+        input2.innerText = input.slice(cursorPosition);
+
+        dock.appendChild(input1);
+        dock.appendChild(cursorContainer);
+        dock.appendChild(input2);
+
+        this.restartCursorBlink();
+    }
+
+    dockDockInView(socketId: string) {
+        const socketElement = document.getElementById(socketId);
+        socketElement.innerText = '';
+
+        this.recursivelyAppendDom(socketId, this.representationRegistry.getDockTemplate())
+    }
+
+    private restartCursorBlink() {
+        clearTimeout(this.cursorBlink);
+        document.getElementById("cursor").style.visibility = 'visible';
+        this.cursorBlink = setInterval(() => {
+            let cursor = document.getElementById("cursor");
+            cursor.style.visibility = cursor.style.visibility === "hidden" ? "visible" : "hidden";
+        }, 530)
+    }
 }
+
+export const StatusClass = {
+    valid: 'valid',
+    invalid: 'invalid',
+    inProgress: 'inProgress'
+};
 
 // import {
 //     EquationNodeInstance,

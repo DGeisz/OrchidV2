@@ -1,8 +1,12 @@
 /**
- * This is a reference of all built
- * sequences that fill line sockets
+ * References to built in html
+ * ids
  */
-export const builtInLineStarters = {
-    set: "set", //Used for defining a new set
-    term: "term", //Used for defining a new term
+export const builtInViewIds = {
+    page: 'page',
+    dock: 'dock'
+};
+
+export const viewTags = {
+    div: 'div'
 };

@@ -24,10 +24,11 @@ export class Instance {
     private isRepresented: boolean; //Is there a corresponding view to this instance (not the case for custom maps with tuple args)
     private isFilled: boolean; //If this is represented, has it's representation been filled out, ie, has the "socket" been filled
 
-    constructor(instanceRegistry: InstanceRegistry, isRepresented?: boolean) {
+    constructor(instanceRegistry: InstanceRegistry, isRepresented: boolean = true) {
         this.id = v4();
         this.instanceRegistry = instanceRegistry;
-        this.isRepresented = typeof isRepresented === "undefined" ? true : isRepresented;
+        this.instanceRegistry.putInstance(this.id, this);
+        this.isRepresented = isRepresented;
         this.isFilled = false;
     }
 
@@ -40,8 +41,8 @@ export class Instance {
         const { exists: derivedExists, target: derivedTarget } = this.battleMap.sq2t(this.id, builtInQuivers.isDerived);
 
         if (derivedExists && parseBoolean(derivedTarget)) {
-            const {exists: mapExists, target: mapTarget} = this.battleMap.sq2t(this.id, builtInQuivers.map);
-            const {exists: argExists, target: argTarget} = this.battleMap.sq2t(this.id, builtInQuivers.arg);
+            const { exists: mapExists, target: mapTarget } = this.battleMap.sq2t(this.id, builtInQuivers.map);
+            const { exists: argExists, target: argTarget } = this.battleMap.sq2t(this.id, builtInQuivers.arg);
 
             if (mapExists && argExists) {
                 const mapInstance = this.instanceRegistry.getInstance(mapTarget);
@@ -64,7 +65,7 @@ export class Instance {
         const { exists: tupleExists, target: tupleTarget } = this.battleMap.sq2t(this.id, builtInQuivers.isTuple);
 
         if (tupleExists && parseBoolean(tupleTarget)) {
-            const {exists: sizeExists, target: sizeTarget} = this.battleMap.sq2t(this.id, builtInQuivers.tupleSize);
+            const { exists: sizeExists, target: sizeTarget } = this.battleMap.sq2t(this.id, builtInQuivers.tupleSize);
             const size = parseInt(sizeTarget);
 
             if (!sizeExists) {
@@ -120,5 +121,34 @@ export class Instance {
             id: this.id,
             isRepresented: this.isRepresented
         }
+    }
+
+    getNext(): Instance | null {
+        return this.next;
+    }
+
+    setNext(instance: Instance | null): void {
+        this.next = instance;
+    }
+
+    getPrev(): Instance | null {
+        return this.prev;
+    }
+
+    setPrev(instance: Instance | null): void {
+        this.prev = instance;
+    }
+
+    syncWithNext(instance: Instance | null): void {
+        if (!instance) {
+            this.next = null;
+        } else {
+            this.setNext(instance);
+            instance.setPrev(this);
+        }
+    }
+
+    setIsRepresented(isRepresented: boolean): void {
+        this.isRepresented = isRepresented;
     }
 }

@@ -9,6 +9,7 @@ export class EditorComplex {
 
     constructor() {
         this.pageRegistry = new PageRegistry();
+        console.log(this.pageRegistry.getFlatPage());
         this.representationEngine = new RepresentationEngine(this.pageRegistry.getFlatPage());
         this.dock = new Dock(this.pageRegistry.getCurrentInstanceId(), this);
     }

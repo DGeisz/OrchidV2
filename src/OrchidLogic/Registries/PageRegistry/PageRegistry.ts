@@ -16,6 +16,10 @@ export class PageRegistry {
         return this.currentPage.getFlatPage();
     }
 
+    getCurrentPage(): Page {
+        return this.currentPage;
+    }
+
     getCurrentInstanceId(): string {
         return this.currentPage.getCurrentInstanceId();
     }

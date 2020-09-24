@@ -10,6 +10,9 @@ export class Page {
 
     constructor() {
         this.id = v4();
+        this.currentLine = new Line();
+
+        this.lines = [this.currentLine];
     }
 
     getId(): string {

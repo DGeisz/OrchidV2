@@ -1,5 +1,6 @@
 import { EditorComplex } from "./EditorComplex";
 import { RepresentationEngine } from "./RepresentationEngine";
+import { Instance } from "../Registries/InstanceRegistry/Instance";
 
 /**
  * The Dock is the abstraction that
@@ -9,19 +10,18 @@ import { RepresentationEngine } from "./RepresentationEngine";
  * what the repEngine projects onto the view
  */
 export class Dock {
-    private socketId: string;
-
     private editorComplex: EditorComplex;
     private representationEngine: RepresentationEngine;
 
+    private currentInstance: Instance;
     private input: string = '';
     private cursorPosition: number = 0;
 
-    constructor(initSocketId: string, editorComplex: EditorComplex) {
-        this.socketId = initSocketId;
+    constructor(instance: Instance, editorComplex: EditorComplex) {
+        this.currentInstance = instance;
         this.editorComplex = editorComplex;
         this.representationEngine = editorComplex.getRepresentationEngine();
-        this.representationEngine.dockDockInView(initSocketId);
+        this.representationEngine.dockDockInView(this.currentInstance.getId());
         this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
     }
 
