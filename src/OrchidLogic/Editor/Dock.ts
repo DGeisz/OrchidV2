@@ -2,6 +2,18 @@ import { EditorComplex } from "./EditorComplex";
 import { RepresentationEngine } from "./RepresentationEngine";
 import { Instance } from "../Registries/InstanceRegistry/Instance";
 
+
+interface ParsedInput {
+    seq: string;
+    isDef: boolean; //True if input is not proceeded by a slash
+    definesMap?: boolean; //True if seq defines a map, like /f(,) or /f()
+    argIsTuple?: boolean; //True if map arg is a tuple, so true for /f(,), false for /f()
+    isEmptyArrow?: boolean; //True if input is /->
+    isEmptyTuple?: boolean; //True if input is /[]
+    definesTuple?: boolean; //True if input takes the form /[int], ie /[4]
+    tupleSize?: number; //Number in defines tuple input, so /[4] maps to 4
+}
+
 /**
  * The Dock is the abstraction that
  * handles user input into a particular
@@ -22,13 +34,13 @@ export class Dock {
         this.editorComplex = editorComplex;
         this.representationEngine = editorComplex.getRepresentationEngine();
         this.representationEngine.dockDockInView(this.currentInstance.getId());
-        this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
+        this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
     }
 
     intakeCharacter(char: string) {
         this.input = [this.input.slice(0, this.cursorPosition), char, this.input.slice(this.cursorPosition)].join('');
         this.cursorPosition++;
-        this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
+        this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
     }
 
     /**
@@ -38,7 +50,7 @@ export class Dock {
         this.input = [this.input.slice(0, this.cursorPosition - 1), this.input.slice(this.cursorPosition)].join('');
         if (this.cursorPosition) {
             this.cursorPosition--;
-            this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
         }
     }
 
@@ -48,7 +60,7 @@ export class Dock {
     goLeft() {
         if (this.cursorPosition > 0) {
             this.cursorPosition--;
-            this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
         }
     }
 
@@ -58,7 +70,7 @@ export class Dock {
     goRight() {
         if (this.cursorPosition < this.input.length) {
             this.cursorPosition++;
-            this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
         }
     }
 
@@ -66,18 +78,31 @@ export class Dock {
      * Attempts a sequence commit with the bois upstairs
      */
     commitSequence() {
-        const [success, newId] = this.editorComplex.commitSequence(this.input);
+        // const [success, newId] = this.editorComplex.commitSequence(this.input);
+        const success = true;
         if (success) {
-            this.socketId = newId;
             this.input = '';
             this.cursorPosition = 0;
-            this.representationEngine.dockDockInView(this.socketId);
-            this.representationEngine.renderInputSeq(this.input, this.cursorPosition);
+            this.representationEngine.dockDockInView(this.currentInstance.getId());
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
         } else {
-            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, true);
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
+        }
+    }
+
+    private static parseInput(input: string): ParsedInput {
+        if (input) {
+
+        } else {
+            return {
+                seq: input,
+                isDef: false
+            }
         }
     }
 }
+
+
 
 
 //
