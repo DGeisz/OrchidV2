@@ -10,3 +10,8 @@ export const builtInViewIds = {
 export const viewTags = {
     div: 'div'
 };
+
+export const builtInAccessors = {
+    emptyArrow: '->',
+    emptyTuple: '[]'
+};

@@ -7,4 +7,5 @@ export const builtInQuivers = {
     isLeaf: 'isLeaf',
     tupleSize: 'tupleSize',
     index: 'index', //This is actually used with numbers to index a tuple from the battle map, so it would be used like 'index0'
+    takesDef: 'takesDef', //Whether this quiver allows for a definition
 };

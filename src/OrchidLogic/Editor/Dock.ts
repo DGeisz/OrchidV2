@@ -1,12 +1,14 @@
 import { EditorComplex } from "./EditorComplex";
-import { RepresentationEngine } from "./RepresentationEngine";
+import { RepresentationEngine, StatusClass } from "./RepresentationEngine";
 import { Instance } from "../Registries/InstanceRegistry/Instance";
+import { stripSlash } from "../utils/functions";
+import { builtInAccessors } from "./BuiltIns";
 
 
 interface ParsedInput {
     seq: string;
     isDef: boolean; //True if input is not proceeded by a slash
-    definesMap?: boolean; //True if seq defines a map, like /f(,) or /f()
+    definesArrow?: boolean; //True if seq defines a map, like /f(,) or /f()
     argIsTuple?: boolean; //True if map arg is a tuple, so true for /f(,), false for /f()
     isEmptyArrow?: boolean; //True if input is /->
     isEmptyTuple?: boolean; //True if input is /[]
@@ -90,9 +92,67 @@ export class Dock {
         }
     }
 
+    private getInputStatus(input: string): typeof StatusClass[keyof typeof StatusClass] {
+        const parsedInput = Dock.parseInput(input);
+        if (parsedInput.isDef) {
+            return this.currentInstance.takesDef() ? StatusClass.valid : StatusClass.invalid;
+        } else if (parsedInput.isEmptyArrow) {
+            return this.currentInstance.takesEmptyArrow() ? StatusClass.valid : StatusClass.invalid;
+        } else if (parsedInput.isEmptyArrow) {
+            return this.currentInstance.takesEmptyTuple() ? StatusClass.valid : StatusClass.invalid;
+        } else if (parsedInput.definesArrow) {
+            //TODO: Get a reference to the accessor registry, and check if the quiver this arrow references
+            // targets the right type
+        }
+    }
+
     private static parseInput(input: string): ParsedInput {
         if (input) {
-
+            if (input[0] === '/') {
+                const stripSlash = input.substring(1);
+                if (stripSlash in Object.values(builtInAccessors)) {
+                    return {
+                        seq: stripSlash,
+                        isDef: false,
+                        isEmptyArrow: stripSlash === builtInAccessors.emptyArrow,
+                        isEmptyTuple: stripSlash === builtInAccessors.emptyTuple
+                    }
+                } else if (stripSlash.substring(stripSlash.length - 2, stripSlash.length) === '()') {
+                    return {
+                        seq: stripSlash,
+                        isDef: false,
+                        definesArrow: true,
+                        argIsTuple: false
+                    }
+                } else if (stripSlash.substring(stripSlash.length - 3, stripSlash.length) === '(,)') {
+                    return {
+                        seq: stripSlash,
+                        isDef: false,
+                        definesArrow: true,
+                        argIsTuple: false
+                    }
+                } else if (
+                    stripSlash[0] === '['
+                    && stripSlash[stripSlash.length - 1] === ']'
+                    && !isNaN(Number(stripSlash.substring(1, stripSlash.length - 1)))
+                ) {
+                    return {
+                        seq: stripSlash,
+                        isDef: false,
+                        definesTuple: true,
+                        tupleSize: parseInt(stripSlash.substring(1, stripSlash.length - 1))
+                    }
+                }
+                return {
+                    seq: stripSlash,
+                    isDef: false
+                }
+            } else {
+                return {
+                    seq: input,
+                    isDef: true
+                }
+            }
         } else {
             return {
                 seq: input,

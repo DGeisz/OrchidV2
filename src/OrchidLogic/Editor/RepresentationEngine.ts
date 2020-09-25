@@ -44,7 +44,7 @@ export class RepresentationEngine {
      * Renders the input within the dock element
      * on the page
      */
-    renderInputSeq(input: string, cursorPosition: number, statusClass: keyof typeof StatusClass) {
+    renderInputSeq(input: string, cursorPosition: number, statusClass: typeof StatusClass[keyof typeof StatusClass]) {
         let dock = document.getElementById("dock");
 
         while (dock.firstChild) {

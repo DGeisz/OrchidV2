@@ -123,6 +123,23 @@ export class Instance {
         }
     }
 
+    //Input checkers
+    takesDef(): boolean {
+        const { exists, target } = this.battleMap.sq2t(this.id, builtInQuivers.takesDef);
+        return exists && parseBoolean(target);
+    }
+
+    takesEmptyArrow(): boolean {
+        return true; //TODO: Right now, can't think of any instance that wouldn't take empty arrow, but impl if otherwise
+    }
+
+    takesEmptyTuple(): boolean {
+        const { exists, target } = this.battleMap.sq2t(this.id, builtInQuivers.isTuple);
+        return exists && parseBoolean(target);
+    }
+
+
+    //Getters and setters
     getNext(): Instance | null {
         return this.next;
     }
