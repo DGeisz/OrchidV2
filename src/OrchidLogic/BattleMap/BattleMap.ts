@@ -24,5 +24,12 @@ export class BattleMap {
             target: ''
         }
     }
+
+    /**
+     * Check whether battle map contains a quiver
+     */
+    hasQuiver(qid: string): boolean {
+        return this.quiverMap.has(qid);
+    }
 }
 

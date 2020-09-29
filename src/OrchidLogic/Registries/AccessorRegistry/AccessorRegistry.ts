@@ -18,15 +18,28 @@ export class AccessorRegistry {
      * Add a new term to the registry and generate
      * an accessor for the term
      */
-    addNewTerm(termSeq: string, termId: string) {
-        let currentAccessor = termSeq;
+    addNewTerm(quiverSeq: string, termId: string) {
+        let currentAccessor = quiverSeq;
 
         while (this.accessor2Id.has(currentAccessor)) {
-            currentAccessor = AccessorRegistry.nextAccessor(termSeq, currentAccessor);
+            currentAccessor = AccessorRegistry.nextAccessor(quiverSeq, currentAccessor);
         }
 
         this.accessor2Id.set(currentAccessor, termId);
         this.id2Accessor.set(termId, currentAccessor);
+    }
+
+    /**
+     * Gets the id of the quiver corresponding to this
+     * accessor.  Also return whether the accessor exists
+     * as the first return of the tuple
+     */
+    getId(accessor: string): {exists: boolean, id: string} {
+        if (this.accessor2Id.has(accessor)) {
+            return {exists: true, id: this.accessor2Id.get(accessor)};
+        } else {
+            return {exists: false, id: ''};
+        }
     }
 
     /**

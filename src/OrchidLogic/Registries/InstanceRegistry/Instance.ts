@@ -138,6 +138,21 @@ export class Instance {
         return exists && parseBoolean(target);
     }
 
+    takesTuple(size: number) {
+        const { exists: typeExists, target: type } = this.battleMap.sq2t(this.id, builtInQuivers.type);
+        if (typeExists) {
+            const { exists: isTupleExists, target: isTuple } = this.battleMap.sq2t(this.id, builtInQuivers.isTuple);
+            if (!(isTupleExists && parseBoolean(isTuple))) {
+                return false;
+            }
+
+            const { exists: tupleSizeExists, target: tupleSize } = this.battleMap.sq2t(this.id, builtInQuivers.tupleSize);
+            if (!tupleSizeExists) return true; //If this doesn't exist, it means this instance is a tuple without a definable size
+            return size === parseInt(tupleSize);
+        } else {
+            return false;
+        }
+    }
 
     //Getters and setters
     getNext(): Instance | null {

@@ -101,9 +101,16 @@ export class Dock {
         } else if (parsedInput.isEmptyArrow) {
             return this.currentInstance.takesEmptyTuple() ? StatusClass.valid : StatusClass.invalid;
         } else if (parsedInput.definesArrow) {
-            //TODO: Get a reference to the accessor registry, and check if the quiver this arrow references
-            // targets the right type
+            return this.editorComplex.isArrowCompatible(
+                parsedInput.seq, this.currentInstance.getId(), parsedInput.argIsTuple)
+            ? StatusClass.valid : StatusClass.invalid;
+        } else if (parsedInput.definesTuple) {
+            return this.currentInstance.takesTuple(parsedInput.tupleSize)
+                ? StatusClass.valid : StatusClass.invalid;
         }
+        return this.editorComplex.isQuiverCompatible(
+            parsedInput.seq, this.currentInstance.getId())
+        ? StatusClass.valid : StatusClass.inProgress;
     }
 
     private static parseInput(input: string): ParsedInput {

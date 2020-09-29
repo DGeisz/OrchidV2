@@ -1,5 +1,6 @@
 import { Page } from "./Page";
 import { PageType } from "../InstanceRegistry/FlatInstanceTypes";
+import { Instance } from "../InstanceRegistry/Instance";
 
 export class PageRegistry {
     private pageMap: Map<string, Page>;
@@ -18,6 +19,10 @@ export class PageRegistry {
 
     getCurrentPage(): Page {
         return this.currentPage;
+    }
+
+    getCurrentInstance(): Instance {
+        return this.currentPage.getCurrentLine().getCurrentInstance();
     }
 
     getCurrentInstanceId(): string {
