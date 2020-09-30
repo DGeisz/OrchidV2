@@ -36,13 +36,24 @@ export class Dock {
         this.editorComplex = editorComplex;
         this.representationEngine = editorComplex.getRepresentationEngine();
         this.representationEngine.dockDockInView(this.currentInstance.getId());
-        this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
+        this.representationEngine.renderInputSeq(this.input, this.cursorPosition, this.getInputStatus(this.input));
     }
 
-    intakeCharacter(char: string) {
+    intakeCharacter(char: string): void {
+        const parsedInput = Dock.parseInput(this.input);
+        if (!this.input ) {
+            console.log("Didn't make it");
+            if (!/[a-zA-Z\/]/.test(char)) {
+                return;
+            }
+        } else if (parsedInput.isDef && !/[a-zA-Z0-9]/.test(char)) {
+            return;
+        } else if (!/[a-zA-Z0-9(),\->\[\]]/.test(char)) {
+            return;
+        }
         this.input = [this.input.slice(0, this.cursorPosition), char, this.input.slice(this.cursorPosition)].join('');
         this.cursorPosition++;
-        this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
+        this.representationEngine.renderInputSeq(this.input, this.cursorPosition, this.getInputStatus(this.input));
     }
 
     /**
@@ -52,7 +63,7 @@ export class Dock {
         this.input = [this.input.slice(0, this.cursorPosition - 1), this.input.slice(this.cursorPosition)].join('');
         if (this.cursorPosition) {
             this.cursorPosition--;
-            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, this.getInputStatus(this.input));
         }
     }
 
@@ -62,7 +73,7 @@ export class Dock {
     goLeft() {
         if (this.cursorPosition > 0) {
             this.cursorPosition--;
-            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, this.getInputStatus(this.input));
         }
     }
 
@@ -72,7 +83,7 @@ export class Dock {
     goRight() {
         if (this.cursorPosition < this.input.length) {
             this.cursorPosition++;
-            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, this.getInputStatus(this.input));
         }
     }
 
@@ -86,19 +97,20 @@ export class Dock {
             this.input = '';
             this.cursorPosition = 0;
             this.representationEngine.dockDockInView(this.currentInstance.getId());
-            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, this.getInputStatus(this.input));
         } else {
-            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, 'inProgress');
+            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, this.getInputStatus(this.input));
         }
     }
 
     private getInputStatus(input: string): typeof StatusClass[keyof typeof StatusClass] {
         const parsedInput = Dock.parseInput(input);
+        console.log("This is status", input, parsedInput)
         if (parsedInput.isDef) {
             return this.currentInstance.takesDef() ? StatusClass.valid : StatusClass.invalid;
         } else if (parsedInput.isEmptyArrow) {
             return this.currentInstance.takesEmptyArrow() ? StatusClass.valid : StatusClass.invalid;
-        } else if (parsedInput.isEmptyArrow) {
+        } else if (parsedInput.isEmptyTuple) {
             return this.currentInstance.takesEmptyTuple() ? StatusClass.valid : StatusClass.invalid;
         } else if (parsedInput.definesArrow) {
             return this.editorComplex.isArrowCompatible(
@@ -117,7 +129,9 @@ export class Dock {
         if (input) {
             if (input[0] === '/') {
                 const stripSlash = input.substring(1);
-                if (stripSlash in Object.values(builtInAccessors)) {
+                console.log("This is stripslash:", stripSlash);
+                console.log("Yote:", Object.values(builtInAccessors));
+                if (Object.values(builtInAccessors).includes(stripSlash)) {
                     return {
                         seq: stripSlash,
                         isDef: false,
