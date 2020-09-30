@@ -1,8 +1,14 @@
+import { builtInBattleMap } from "./BuiltInQuivers";
+
 export class BattleMap {
     private quiverMap: Map<string, Map<string, string>>;
 
     constructor() {
         this.quiverMap = new Map<string, Map<string, string>>();
+
+        for (let quiver in builtInBattleMap) {
+            this.quiverMap.set(quiver, new Map<string, string>(Object.entries(builtInBattleMap[quiver])));
+        }
     }
 
     /**
@@ -11,11 +17,11 @@ export class BattleMap {
      */
     sq2t(source: string, quiver: string): {exists: boolean, target: string} {
         if (this.quiverMap.has(source)) {
-            const quiverArrows = this.quiverMap.get(source);
-            if (quiverArrows.has(quiver)) {
+            const sourcedArrows = this.quiverMap.get(source);
+            if (sourcedArrows.has(quiver)) {
                 return {
                     exists: true,
-                    target: quiverArrows.get(quiver)
+                    target: sourcedArrows.get(quiver)
                 }
             }
         }
@@ -23,6 +29,20 @@ export class BattleMap {
             exists: false,
             target: ''
         }
+    }
+
+    /**
+     * Creates an arrow from source, throw quiver, to target
+     */
+    createArrow(source: string, quiver: string, target: string): void {
+        let sourcedArrows: Map<string, string>;
+        if (this.hasQuiver(source)) {
+            sourcedArrows = this.quiverMap.get(source);
+        } else {
+            sourcedArrows = new Map<string, string>();
+            this.quiverMap.set(source, sourcedArrows);
+        }
+        sourcedArrows.set(quiver, target);
     }
 
     /**

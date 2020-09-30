@@ -3,6 +3,8 @@ import { RepresentationTemplate } from "../Registries/RepresentationRegistry/Rep
 import { builtInViewIds } from "./BuiltIns";
 import { stripSlash } from "../utils/functions";
 import { RepresentationRegistry } from "../Registries/RepresentationRegistry/RepresentationRegistry";
+import { idSeparator, idSuffixes } from "../Registries/RepresentationRegistry/RepresentationConstants";
+import { Instance } from "../Registries/InstanceRegistry/Instance";
 
 export class RepresentationEngine {
     private representationRegistry: RepresentationRegistry;
@@ -13,27 +15,42 @@ export class RepresentationEngine {
         this.representationRegistry = representationRegistry;
 
         for (let line of initPage) {
-            this.recursivelyAppendDom(builtInViewIds.page,
-                this.representationRegistry.getRepTemplate(line));
+            this.recursivelyAppendDom(
+                this.representationRegistry.getRepTemplate(line),
+                builtInViewIds.page
+            );
         }
     }
 
-    recursivelyAppendDom(parentId: string, template: RepresentationTemplate) {
+    populateInstance(instance: Instance) {
+        console.log(this.representationRegistry.getRepTemplate(instance.getFlatRep()));
+        this.recursivelyAppendDom(
+            this.representationRegistry.getRepTemplate(instance.getFlatRep())
+        );
+    }
 
-        const newElement = document.createElement(template.elementType);
-        newElement.setAttribute('id', template.id);
-        newElement.setAttribute('class', template.class);
-
-        const parentElement = document.getElementById(parentId);
-        parentElement.appendChild(newElement);
-
-        if (template.innerText) {
-            newElement.innerText = template.innerText;
-            console.log("Appended", template.innerText, "To node!");
-
-        } else {
+    private recursivelyAppendDom(template: RepresentationTemplate, parentId?: string) {
+        const templateElement = document.getElementById(template.id);
+        if (templateElement) {
             for (let childTemplate of template.children) {
-                this.recursivelyAppendDom(template.id, childTemplate);
+                this.recursivelyAppendDom(childTemplate, template.id);
+            }
+        } else if (parentId) {
+            const newElement = document.createElement(template.elementType);
+            newElement.setAttribute('id', template.id);
+            newElement.setAttribute('class', template.class);
+
+            const parentElement = document.getElementById(parentId);
+            parentElement.appendChild(newElement);
+
+            if (template.innerText) {
+                newElement.innerText = template.innerText;
+                console.log("Appended", template.innerText, "To node!");
+
+            } else {
+                for (let childTemplate of template.children) {
+                    this.recursivelyAppendDom(childTemplate, template.id);
+                }
             }
         }
     }
@@ -71,11 +88,21 @@ export class RepresentationEngine {
         this.restartCursorBlink();
     }
 
-    dockDockInView(socketId: string) {
-        const socketElement = document.getElementById(socketId);
+    dockDockInView(instanceId: string) {
+        const inputId = [instanceId, idSuffixes.instanceInput].join(idSeparator);
+        const socketElement = document.getElementById(inputId);
         socketElement.innerText = '';
 
-        this.recursivelyAppendDom(socketId, this.representationRegistry.getDockTemplate())
+        this.recursivelyAppendDom(this.representationRegistry.getDockTemplate(), inputId)
+    }
+
+    removeDock(instanceId: string) {
+        const socket = document.getElementById([instanceId, idSuffixes.instanceInput].join(idSeparator));
+        clearTimeout(this.cursorBlink);
+
+        while (socket.firstChild) {
+            socket.removeChild(socket.lastChild);
+        }
     }
 
     private restartCursorBlink() {

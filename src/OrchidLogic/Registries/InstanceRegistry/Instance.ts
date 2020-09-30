@@ -4,6 +4,7 @@ import { InstanceType } from "./FlatInstanceTypes";
 import { builtInQuivers } from "../../BattleMap/BuiltInQuivers";
 import { parseBoolean } from "../../utils/functions";
 import { InstanceRegistry } from "./InstanceRegistry";
+import { Line } from "../PageRegistry/Line";
 
 /**
  * Essentially the middle man between the quiver representation
@@ -19,14 +20,16 @@ export class Instance {
     //References to higher structures
     private readonly battleMap: BattleMap;
     private readonly instanceRegistry: InstanceRegistry;
+    private readonly line: Line;
 
     //Quiver properties of the instance
     private isRepresented: boolean; //Is there a corresponding view to this instance (not the case for custom maps with tuple args)
     private isFilled: boolean; //If this is represented, has it's representation been filled out, ie, has the "socket" been filled
 
-    constructor(battleMap: BattleMap, instanceRegistry: InstanceRegistry, isRepresented: boolean = true) {
+    constructor(battleMap: BattleMap, instanceRegistry: InstanceRegistry, line: Line, isRepresented: boolean = true) {
         this.id = v4();
         this.battleMap = battleMap;
+        this.line = line;
         this.instanceRegistry = instanceRegistry;
         this.instanceRegistry.putInstance(this.id, this);
         this.isRepresented = isRepresented;
@@ -40,7 +43,6 @@ export class Instance {
     getFlatRep(): InstanceType {
         this.isFilled = true;
         const { exists: derivedExists, target: derivedTarget } = this.battleMap.sq2t(this.id, builtInQuivers.isDerived);
-
 
         if (derivedExists && parseBoolean(derivedTarget)) {
             const { exists: mapExists, target: mapTarget } = this.battleMap.sq2t(this.id, builtInQuivers.map);
@@ -155,6 +157,20 @@ export class Instance {
             return false;
         }
     }
+
+    //Committers
+    commitEmptyArrow(): Instance {
+        this.battleMap.createArrow(this.id, builtInQuivers.isDerived, builtInQuivers.true);
+        const mapQuiver = new Instance(this.battleMap, this.instanceRegistry, this.line);
+        const argQuiver = new Instance(this.battleMap, this.instanceRegistry, this.line);
+        this.battleMap.createArrow(this.id, builtInQuivers.map, mapQuiver.getId());
+        this.battleMap.createArrow(this.id, builtInQuivers.arg, argQuiver.getId());
+        mapQuiver.setPrev(this.prev);
+        mapQuiver.syncWithNext(argQuiver);
+        argQuiver.syncWithNext(this);
+        return mapQuiver;
+    }
+
 
     //Getters and setters
     getNext(): Instance | null {

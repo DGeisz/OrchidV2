@@ -1,3 +1,6 @@
+import { builtInAccessors } from "../../Editor/BuiltIns";
+import { builtInAccessorMap } from "./BuiltInAccessors";
+
 export class AccessorRegistry {
     /**
      * Mapping from accessor to id
@@ -12,21 +15,24 @@ export class AccessorRegistry {
     constructor() {
         this.accessor2Id = new Map<string, string>();
         this.id2Accessor = new Map<string, string>();
+
+        for (let accessor in builtInAccessorMap) {
+            this.setAccessor(accessor, builtInAccessorMap[accessor]);
+        }
     }
 
     /**
      * Add a new term to the registry and generate
      * an accessor for the term
      */
-    addNewTerm(quiverSeq: string, termId: string) {
+    addNewTerm(quiverSeq: string, qid: string) {
         let currentAccessor = quiverSeq;
 
         while (this.accessor2Id.has(currentAccessor)) {
             currentAccessor = AccessorRegistry.nextAccessor(quiverSeq, currentAccessor);
         }
 
-        this.accessor2Id.set(currentAccessor, termId);
-        this.id2Accessor.set(termId, currentAccessor);
+        this.setAccessor(currentAccessor, qid);
     }
 
     /**
@@ -43,6 +49,14 @@ export class AccessorRegistry {
     }
 
     /**
+     * Sets an accessor
+     */
+    setAccessor(accessor: string, id: string) {
+        this.accessor2Id.set(accessor, id);
+        this.id2Accessor.set(id, accessor);
+    }
+
+    /**
      * Generates the next accessor available for seq
      */
     private static nextAccessor(originalSeq: string, currentSeq: string): string {
@@ -53,7 +67,7 @@ export class AccessorRegistry {
         if (lastChar === 'z') {
             return [currentSeq, 'a'].join('');
         } else {
-            return  currentSeq.substring(0, currentSeq.length - 1)
+            return currentSeq.substring(0, currentSeq.length - 1)
                 + String.fromCharCode(currentSeq.charCodeAt(currentSeq.length - 1) + 1);
         }
     }

@@ -16,6 +16,7 @@ export class Controller {
         document.addEventListener('keydown', (e): void => {
             switch (e.key) {
                 case "Backspace":
+                    console.log("th");
                     dock.deleteCharacter();
                     return;
                 case "ArrowRight":

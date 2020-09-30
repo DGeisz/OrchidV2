@@ -91,14 +91,19 @@ export class Dock {
      * Attempts a sequence commit with the bois upstairs
      */
     commitSequence() {
-        // const [success, newId] = this.editorComplex.commitSequence(this.input);
-        const success = true;
-        if (success) {
+        if (this.getInputStatus(this.input) === StatusClass.valid) {
+            this.representationEngine.removeDock(this.currentInstance.getId());
+            const parsedInput = Dock.parseInput(this.input);
+            if (parsedInput.isDef) {
+                //TODO: Figure out definitions
+            } else if (parsedInput.isEmptyArrow) {
+                const newInstance = this.currentInstance.commitEmptyArrow();
+                this.representationEngine.populateInstance(this.currentInstance);
+                this.currentInstance = newInstance;
+            }
+            this.representationEngine.dockDockInView(this.currentInstance.getId());
             this.input = '';
             this.cursorPosition = 0;
-            this.representationEngine.dockDockInView(this.currentInstance.getId());
-            this.representationEngine.renderInputSeq(this.input, this.cursorPosition, this.getInputStatus(this.input));
-        } else {
             this.representationEngine.renderInputSeq(this.input, this.cursorPosition, this.getInputStatus(this.input));
         }
     }
@@ -129,8 +134,6 @@ export class Dock {
         if (input) {
             if (input[0] === '/') {
                 const stripSlash = input.substring(1);
-                console.log("This is stripslash:", stripSlash);
-                console.log("Yote:", Object.values(builtInAccessors));
                 if (Object.values(builtInAccessors).includes(stripSlash)) {
                     return {
                         seq: stripSlash,
@@ -140,17 +143,17 @@ export class Dock {
                     }
                 } else if (stripSlash.substring(stripSlash.length - 2, stripSlash.length) === '()') {
                     return {
-                        seq: stripSlash,
+                        seq: stripSlash.substring(0, stripSlash.length - 2),
                         isDef: false,
                         definesArrow: true,
                         argIsTuple: false
                     }
                 } else if (stripSlash.substring(stripSlash.length - 3, stripSlash.length) === '(,)') {
                     return {
-                        seq: stripSlash,
+                        seq: stripSlash.substring(0, stripSlash.length - 3),
                         isDef: false,
                         definesArrow: true,
-                        argIsTuple: false
+                        argIsTuple: true
                     }
                 } else if (
                     stripSlash[0] === '['

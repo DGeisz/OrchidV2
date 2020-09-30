@@ -4,7 +4,7 @@ import { InstanceRegistry } from "../InstanceRegistry/InstanceRegistry";
 import { BattleMap } from "../../BattleMap/BattleMap";
 
 export class Line {
-    private proposition: Instance;
+    private readonly proposition: Instance;
     private currentInstance: Instance;
 
     private readonly battleMap: BattleMap;
@@ -13,12 +13,16 @@ export class Line {
     constructor(battleMap: BattleMap) {
         this.battleMap = battleMap;
         this.lineInstanceRegistry = new InstanceRegistry();
-        this.proposition = new Instance(this.battleMap, this.lineInstanceRegistry);
+        this.proposition = new Instance(this.battleMap, this.lineInstanceRegistry, this);
         this.currentInstance = this.proposition;
     }
 
     getCurrentInstance(): Instance {
         return this.currentInstance;
+    }
+
+    setCurrentInstance(instance: Instance): void {
+        this.currentInstance = instance;
     }
 
     getFlatLine(): InstanceType {
