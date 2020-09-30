@@ -36,7 +36,7 @@ export class RepresentationRegistry {
                             {
                                 id: '',
                                 elementType: viewTags.div,
-                                class: '',
+                                class: 'parenthesis',
                                 innerText: '(',
                                 children: []
                             },
@@ -51,7 +51,7 @@ export class RepresentationRegistry {
                             {
                                 id: '',
                                 elementType: viewTags.div,
-                                class: '',
+                                class: 'parenthesis',
                                 innerText: ')',
                                 children: []
                             }

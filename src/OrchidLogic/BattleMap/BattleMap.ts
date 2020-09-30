@@ -32,6 +32,13 @@ export class BattleMap {
     }
 
     /**
+     * Simply adds a quiver to the battle map
+     */
+    putQuiver(quiver: string): void {
+        this.quiverMap.set(quiver, new Map<string, string>());
+    }
+
+    /**
      * Creates an arrow from source, throw quiver, to target
      */
     createArrow(source: string, quiver: string, target: string): void {

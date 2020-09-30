@@ -46,3 +46,7 @@ div {
 .invalid {
     color: red;
 }
+
+.parenthesis {
+    margin: 0 2px 0 2px;
+}

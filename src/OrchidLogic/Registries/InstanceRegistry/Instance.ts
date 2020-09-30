@@ -29,6 +29,7 @@ export class Instance {
     constructor(battleMap: BattleMap, instanceRegistry: InstanceRegistry, line: Line, isRepresented: boolean = true) {
         this.id = v4();
         this.battleMap = battleMap;
+        this.battleMap.putQuiver(this.id);
         this.line = line;
         this.instanceRegistry = instanceRegistry;
         this.instanceRegistry.putInstance(this.id, this);
