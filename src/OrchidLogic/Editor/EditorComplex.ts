@@ -16,8 +16,8 @@ export class EditorComplex {
     private readonly pageRegistry: PageRegistry;
 
     constructor() {
-        this.pageRegistry = new PageRegistry();
         this.battleMap = new BattleMap();
+        this.pageRegistry = new PageRegistry(this.battleMap);
         this.accessorRegistry = new AccessorRegistry();
         console.log(this.pageRegistry.getFlatPage());
         this.representationRegistry = new RepresentationRegistry();

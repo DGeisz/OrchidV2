@@ -1,14 +1,18 @@
 import { Page } from "./Page";
 import { PageType } from "../InstanceRegistry/FlatInstanceTypes";
 import { Instance } from "../InstanceRegistry/Instance";
+import { BattleMap } from "../../BattleMap/BattleMap";
 
 export class PageRegistry {
     private pageMap: Map<string, Page>;
     private currentPage: Page;
 
-    constructor() {
+    private readonly battleMap: BattleMap;
+
+    constructor(battleMap: BattleMap) {
+        this.battleMap = battleMap;
         this.pageMap = new Map<string, Page>();
-        this.currentPage = new Page();
+        this.currentPage = new Page(this.battleMap);
 
         this.pageMap.set(this.currentPage.getId(), this.currentPage);
     }

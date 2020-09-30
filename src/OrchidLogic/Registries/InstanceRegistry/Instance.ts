@@ -24,8 +24,9 @@ export class Instance {
     private isRepresented: boolean; //Is there a corresponding view to this instance (not the case for custom maps with tuple args)
     private isFilled: boolean; //If this is represented, has it's representation been filled out, ie, has the "socket" been filled
 
-    constructor(instanceRegistry: InstanceRegistry, isRepresented: boolean = true) {
+    constructor(battleMap: BattleMap, instanceRegistry: InstanceRegistry, isRepresented: boolean = true) {
         this.id = v4();
+        this.battleMap = battleMap;
         this.instanceRegistry = instanceRegistry;
         this.instanceRegistry.putInstance(this.id, this);
         this.isRepresented = isRepresented;
@@ -39,6 +40,7 @@ export class Instance {
     getFlatRep(): InstanceType {
         this.isFilled = true;
         const { exists: derivedExists, target: derivedTarget } = this.battleMap.sq2t(this.id, builtInQuivers.isDerived);
+
 
         if (derivedExists && parseBoolean(derivedTarget)) {
             const { exists: mapExists, target: mapTarget } = this.battleMap.sq2t(this.id, builtInQuivers.map);

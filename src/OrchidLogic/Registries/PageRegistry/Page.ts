@@ -1,16 +1,19 @@
 import {v4} from 'uuid';
 import { PageType } from "../InstanceRegistry/FlatInstanceTypes";
 import { Line } from "./Line";
+import { BattleMap } from "../../BattleMap/BattleMap";
 
 export class Page {
     private lines: Line[]; //List of lines that comprise the page
     private currentLine: Line;
-
     private readonly id: string;
 
-    constructor() {
+    private readonly battleMap: BattleMap;
+
+    constructor(battleMap: BattleMap) {
         this.id = v4();
-        this.currentLine = new Line();
+        this.battleMap = battleMap;
+        this.currentLine = new Line(this.battleMap);
 
         this.lines = [this.currentLine];
     }

@@ -1,4 +1,4 @@
-import type { InstanceType, PageType } from "../Registries/InstanceRegistry/FlatInstanceTypes";
+import { InstanceType, isTupleInstance, PageType } from "../Registries/InstanceRegistry/FlatInstanceTypes";
 import { RepresentationTemplate } from "../Registries/RepresentationRegistry/RepresentationTypes";
 import { builtInViewIds } from "./BuiltIns";
 import { stripSlash } from "../utils/functions";
@@ -13,15 +13,12 @@ export class RepresentationEngine {
         this.representationRegistry = representationRegistry;
 
         for (let line of initPage) {
-            this.appendRepresentation(builtInViewIds.page, line);
+            this.recursivelyAppendDom(builtInViewIds.page,
+                this.representationRegistry.getRepTemplate(line));
         }
     }
 
-    appendRepresentation(parentId: string, flatRep: InstanceType) {
-
-    }
-
-    private recursivelyAppendDom(parentId: string, template: RepresentationTemplate) {
+    recursivelyAppendDom(parentId: string, template: RepresentationTemplate) {
 
         const newElement = document.createElement(template.elementType);
         newElement.setAttribute('id', template.id);
@@ -40,6 +37,8 @@ export class RepresentationEngine {
             }
         }
     }
+
+
     /**
      * Renders the input within the dock element
      * on the page
