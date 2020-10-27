@@ -32,6 +32,11 @@ export class RepresentationEngine {
     private recursivelyAppendDom(template: RepresentationTemplate, parentId?: string) {
         const templateElement = document.getElementById(template.id);
         if (templateElement) {
+
+            while(templateElement.firstChild) {
+                templateElement.removeChild(templateElement.lastChild);
+            }
+
             for (let childTemplate of template.children) {
                 this.recursivelyAppendDom(childTemplate, template.id);
             }

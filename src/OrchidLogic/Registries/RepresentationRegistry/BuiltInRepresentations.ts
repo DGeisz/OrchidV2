@@ -9,8 +9,18 @@ export const builtInRepresentations = new Map<string, RepresentationTemplate>([
         {
             elementType: viewTags.div,
             id: '',
-            class: '',
+            class: 'italic',
             innerText: builtInQuivers.isBool,
+            children: []
+        }
+    ],
+    [
+        builtInQuivers.isQuiver,
+        {
+            elementType: viewTags.div,
+            id: '',
+            class: 'italic',
+            innerText: builtInQuivers.isQuiver,
             children: []
         }
     ]

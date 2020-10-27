@@ -14,5 +14,4 @@ export class InstanceRegistry {
     putInstance(id: string, instance: Instance): void {
         this.instanceMap.set(id, instance);
     }
-
 }

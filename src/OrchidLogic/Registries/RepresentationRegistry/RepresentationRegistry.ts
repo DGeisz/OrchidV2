@@ -22,7 +22,6 @@ export class RepresentationRegistry {
         if (isTupleInstance(flatRep)) {
 
         } else if (isDerivedInstance(flatRep)) {
-            console.log('------ &&&&&&&&&&&&&&& ================ \n\n');
             return {
                 id: flatRep.id,
                 elementType: viewTags.div,
@@ -69,14 +68,38 @@ export class RepresentationRegistry {
                         id: [flatRep.id, idSuffixes.instanceInput].join(idSeparator),
                         elementType: viewTags.div,
                         class: '',
-                        innerText: '☐',
+                        innerText: '',
                         children: []
                     }
                 ]
             }
 
         } else if (isLeafInstance(flatRep)) {
+            const iOfTemplate = this.leafRepresentations.get(flatRep.iOf);
 
+            if (!iOfTemplate) {
+                throw new Error("No template for iOf of current leaf instance!");
+            }
+
+            return {
+                id: flatRep.id,
+                elementType: viewTags.div,
+                class: '',
+                children: [
+                    {
+                        id: [flatRep.id, idSuffixes.instanceHolder].join(idSeparator),
+                        elementType: viewTags.div,
+                        class: '',
+                        children: [iOfTemplate]
+                    },
+                    {
+                        id: [flatRep.id, idSuffixes.instanceInput].join(idSeparator),
+                        elementType: viewTags.div,
+                        class: '',
+                        children: []
+                    }
+                ]
+            }
         }
         return {
             id: flatRep.id,

@@ -101,6 +101,26 @@ export class Dock {
             if (parsedInput.isDef) {
                 //TODO: Figure out definitions
             } else if (parsedInput.definesArrow) {
+                //First commit an empty arrow
+                const mapInstance = this.currentInstance.commitEmptyArrow();
+
+                //Get id of iOf
+                const {exists, id: iOf} = this.accessorRegistry.getId(parsedInput.seq);
+
+                //Be sure iOf exists
+                if (exists) {
+                    //Commit iOf to mapInstance, return next, which is argInstance
+                    const argInstance = mapInstance.commitLeaf(iOf);
+
+                    //Render full representation
+                    this.representationEngine.populateInstance(this.currentInstance);
+
+                    //Re-dock dock on argInstance
+                    this.currentInstance = argInstance;
+                } else {
+                    //If iOf doesn't exists, then make mapInstance the current Instance
+                    this.currentInstance = mapInstance;
+                }
 
             } else if (parsedInput.isEmptyArrow) {
                 //Commit the empty arrow instance-side
@@ -126,6 +146,7 @@ export class Dock {
 
                     //Re-dock dock
                     this.currentInstance = nextInstance;
+
                 }
             }
 
