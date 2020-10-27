@@ -161,15 +161,34 @@ export class Instance {
 
     //Committers
     commitEmptyArrow(): Instance {
+        //Indicate that this is a derived instance
         this.battleMap.createArrow(this.id, builtInQuivers.isDerived, builtInQuivers.true);
+
+        //Create map and arg quivers
         const mapQuiver = new Instance(this.battleMap, this.instanceRegistry, this.line);
         const argQuiver = new Instance(this.battleMap, this.instanceRegistry, this.line);
+
+        //Create the battle relations between instance and the new quivers
         this.battleMap.createArrow(this.id, builtInQuivers.map, mapQuiver.getId());
         this.battleMap.createArrow(this.id, builtInQuivers.arg, argQuiver.getId());
+
+        //Sync up instances
         mapQuiver.setPrev(this.prev);
         mapQuiver.syncWithNext(argQuiver);
         argQuiver.syncWithNext(this);
+
+        //Return the map quiver, which is the next quiver to fill in
         return mapQuiver;
+    }
+
+    commitLeaf(iOf: string): Instance {
+        //Indicate that this instance is in fact a leaf
+        this.battleMap.createArrow(this.id, builtInQuivers.isLeaf, builtInQuivers.true);
+
+        //Insert iOf into battle map
+        this.battleMap.createArrow(this.id, builtInQuivers.iOf, iOf);
+
+        return this.getNext();
     }
 
 

@@ -39,7 +39,7 @@ export class EditorComplex {
                 throw new Error('Arrow quiver or instance quiver not in battle map');
             }
 
-            //Check if arrowQuiver actually takes a boolean
+            //Check if arrowQuiver actually takes a tuple
             if (isArgTuple) {
                 const {exists: sourceTypeExists, target: sourceType} = this.battleMap.sq2t(arrowQuiverId, builtInQuivers.sourceType);
                 console.log("Source type:", sourceTypeExists, sourceType);
@@ -99,6 +99,10 @@ export class EditorComplex {
 
     getDock(): Dock {
         return this.dock;
+    }
+
+    getAccessorRegistry(): AccessorRegistry {
+        return this.accessorRegistry;
     }
 }
 

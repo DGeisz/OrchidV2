@@ -37,8 +37,8 @@ export class RepresentationEngine {
             }
         } else if (parentId) {
             const newElement = document.createElement(template.elementType);
-            newElement.setAttribute('id', template.id);
-            newElement.setAttribute('class', template.class);
+            if (template.id) newElement.setAttribute('id', template.id);
+            if (template.class) newElement.setAttribute('class', template.class);
 
             const parentElement = document.getElementById(parentId);
             parentElement.appendChild(newElement);

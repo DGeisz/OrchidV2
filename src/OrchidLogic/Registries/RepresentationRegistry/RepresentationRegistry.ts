@@ -7,8 +7,16 @@ import {
     isTupleInstance
 } from "../InstanceRegistry/FlatInstanceTypes";
 import { idSeparator, idSuffixes} from "./RepresentationConstants";
+import { builtInRepresentations } from "./BuiltInRepresentations";
 
 export class RepresentationRegistry {
+
+    private leafRepresentations: Map<string, RepresentationTemplate>;
+
+    constructor() {
+        this.leafRepresentations = new Map<string, RepresentationTemplate>(builtInRepresentations);
+    }
+
 
     getRepTemplate(flatRep: InstanceType): RepresentationTemplate {
         if (isTupleInstance(flatRep)) {

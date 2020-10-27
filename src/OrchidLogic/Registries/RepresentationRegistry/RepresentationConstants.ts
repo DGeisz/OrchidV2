@@ -5,8 +5,8 @@
  * <div id="id">
  *     <div id="id:h">
  *     </div>
- *     <div>
- *     </div id="id:i">
+ *     <div id="id:i">
+ *     </div>
  *</div>*/
 export const idSeparator = ':';
 

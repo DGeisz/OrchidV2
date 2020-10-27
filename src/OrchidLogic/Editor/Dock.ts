@@ -3,6 +3,7 @@ import { RepresentationEngine, StatusClass } from "./RepresentationEngine";
 import { Instance } from "../Registries/InstanceRegistry/Instance";
 import { stripSlash } from "../utils/functions";
 import { builtInAccessors } from "./BuiltIns";
+import { AccessorRegistry } from "../Registries/AccessorRegistry/AccessorRegistry";
 
 
 interface ParsedInput {
@@ -26,6 +27,7 @@ interface ParsedInput {
 export class Dock {
     private editorComplex: EditorComplex;
     private representationEngine: RepresentationEngine;
+    private accessorRegistry: AccessorRegistry;
 
     private currentInstance: Instance;
     private input: string = '';
@@ -34,6 +36,7 @@ export class Dock {
     constructor(instance: Instance, editorComplex: EditorComplex) {
         this.currentInstance = instance;
         this.editorComplex = editorComplex;
+        this.accessorRegistry = editorComplex.getAccessorRegistry();
         this.representationEngine = editorComplex.getRepresentationEngine();
         this.representationEngine.dockDockInView(this.currentInstance.getId());
         this.representationEngine.renderInputSeq(this.input, this.cursorPosition, this.getInputStatus(this.input));
@@ -94,13 +97,38 @@ export class Dock {
         if (this.getInputStatus(this.input) === StatusClass.valid) {
             this.representationEngine.removeDock(this.currentInstance.getId());
             const parsedInput = Dock.parseInput(this.input);
+
             if (parsedInput.isDef) {
                 //TODO: Figure out definitions
+            } else if (parsedInput.definesArrow) {
+
             } else if (parsedInput.isEmptyArrow) {
-                const newInstance = this.currentInstance.commitEmptyArrow();
+                //Commit the empty arrow instance-side
+                const nextInstance = this.currentInstance.commitEmptyArrow();
+
+                //Render the representation
                 this.representationEngine.populateInstance(this.currentInstance);
-                this.currentInstance = newInstance;
+
+                //Re-dock dock
+                this.currentInstance = nextInstance;
+            } else {
+                //At this point, we're committing a leaf
+                //First get quiver id from accessor TODO: Figure out scopes
+                const {exists, id: iOf} = this.accessorRegistry.getId(parsedInput.seq);
+
+                //As a final measure, make sure iOf exists
+                if (exists) {
+                    //Commit this iOf to current instance
+                    const nextInstance = this.currentInstance.commitLeaf(iOf);
+
+                    //Render the rep
+                    this.representationEngine.populateInstance(this.currentInstance);
+
+                    //Re-dock dock
+                    this.currentInstance = nextInstance;
+                }
             }
+
             this.representationEngine.dockDockInView(this.currentInstance.getId());
             this.input = '';
             this.cursorPosition = 0;
