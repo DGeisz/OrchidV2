@@ -190,7 +190,7 @@ export class TyperSupreme {
      * This is a helper method that checks if a particular source quiver
      * is true or false under a particular proposition
      *
-     * sp2b = source >- proposition -> boolean, ie it has the same form as sq2t
+     * sp2b = sorce >- proposition -> boolean, ie it has the same form as sq2t
      *
      * Note that this is NOT type safe, and only has definable behavior
      * if the proposition quiver really is a proposition quiver
