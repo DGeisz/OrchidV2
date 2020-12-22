@@ -24,7 +24,7 @@ export class Instance {
 
     //Quiver properties of the instance
     private isRepresented: boolean; //Is there a corresponding view to this instance (not the case for custom maps with tuple args)
-    private isFilled: boolean; //If this is represented, has it's representation been filled out, ie, has the "socket" been filled
+    private isFilled: boolean; //If this is represented, has its representation been filled out, ie, has the "socket" been filled
 
     constructor(battleMap: BattleMap, instanceRegistry: InstanceRegistry, line: Line, isRepresented: boolean = true) {
         this.id = v4();
@@ -218,7 +218,7 @@ export class Instance {
         }
     }
 
-    setIsRepresented(isRepresented: boolean): void {
+    setRepresented(isRepresented: boolean): void {
         this.isRepresented = isRepresented;
     }
 }

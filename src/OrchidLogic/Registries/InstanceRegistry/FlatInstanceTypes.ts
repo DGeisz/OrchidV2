@@ -14,8 +14,8 @@ export function isBasicInstance(instance: InstanceType): instance is BasicInstan
 /**
  * This is an instance that is in it's final form,
  * ie, it has a static non-variable representation, like x or G.
- * This is in contrast to Derived or Tuple instances, who's type and
- * structure is intrinsically dependent on other terms
+ * This is in contrast to Derived or Tuple instances, whose type and
+ * structure are intrinsically dependent on other terms
  */
 export interface LeafInstanceType extends BasicInstanceType {
     iOf: string; //instance of which quiver i.e. instance >- iOf -> x
