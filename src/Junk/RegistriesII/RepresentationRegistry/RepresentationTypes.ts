@@ -1,4 +1,4 @@
-import { viewTags } from "../../Editor/BuiltIns";
+import { viewTags } from "../../../OrchidLogic/Editor/BuiltIns";
 
 /**
  * This is an editor specific format.

@@ -1,14 +1,8 @@
-import { builtInBattleMap } from "./BuiltInQuivers";
-
 export class BattleMap {
     private quiverMap: Map<string, Map<string, string>>;
 
     constructor() {
         this.quiverMap = new Map<string, Map<string, string>>();
-
-        for (let quiver in builtInBattleMap) {
-            this.quiverMap.set(quiver, new Map<string, string>(Object.entries(builtInBattleMap[quiver])));
-        }
     }
 
     /**

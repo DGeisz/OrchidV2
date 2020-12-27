@@ -1,10 +1,10 @@
-import { InstanceType, isTupleInstance, PageType } from "../Registries/InstanceRegistry/FlatInstanceTypes";
-import { RepresentationTemplate } from "../Registries/RepresentationRegistry/RepresentationTypes";
+import { InstanceType, isTupleInstance, PageType } from "../../Junk/RegistriesII/InstanceRegistry/FlatInstanceTypes";
+import { RepresentationTemplate } from "../../Junk/RegistriesII/RepresentationRegistry/RepresentationTypes";
 import { builtInViewIds } from "./BuiltIns";
 import { stripSlash } from "../utils/functions";
-import { RepresentationRegistry } from "../Registries/RepresentationRegistry/RepresentationRegistry";
-import { idSeparator, idSuffixes } from "../Registries/RepresentationRegistry/RepresentationConstants";
-import { Instance } from "../Registries/InstanceRegistry/Instance";
+import { RepresentationRegistry } from "../../Junk/RegistriesII/RepresentationRegistry/RepresentationRegistry";
+import { idSeparator, idSuffixes } from "../../Junk/RegistriesII/RepresentationRegistry/RepresentationConstants";
+import { Instance } from "../../Junk/RegistriesII/InstanceRegistry/Instance";
 
 export class RepresentationEngine {
     private representationRegistry: RepresentationRegistry;
@@ -131,11 +131,11 @@ export const StatusClass = {
 //     EquationNodeShape,
 //     EquationPage, isDerivedTerm, isSetDef,
 //     isSocket, isTuple
-// } from "../../Junk/Registries/EquationRegistry/EquationTypes";
+// } from "../../Junk/RegistriesII/EquationRegistry/EquationTypes";
 // import { EditorComplex } from "./EditorComplex";
-// import { RepresentationRegistry } from "../../Junk/Registries/RepresentationRegistry/RepresentationRegistry";
-// import { RepresentationTemplate } from "../../Junk/Registries/RepresentationRegistry/RepresentationTypes";
-// import { EquationRegistry } from "../../Junk/Registries/EquationRegistry/EquationRegistry";
+// import { RepresentationRegistry } from "../../Junk/RegistriesII/RepresentationRegistry/RepresentationRegistry";
+// import { RepresentationTemplate } from "../../Junk/RegistriesII/RepresentationRegistry/RepresentationTypes";
+// import { EquationRegistry } from "../../Junk/RegistriesII/EquationRegistry/EquationRegistry";
 // import { stripSlash } from "./utils/functions";
 //
 // /**

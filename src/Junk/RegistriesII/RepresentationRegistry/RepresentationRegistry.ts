@@ -1,5 +1,5 @@
 import { RepresentationTemplate } from "./RepresentationTypes";
-import { builtInViewIds, viewTags } from "../../Editor/BuiltIns";
+import { builtInViewIds, viewTags } from "../../../OrchidLogic/Editor/BuiltIns";
 import {
     InstanceType,
     isDerivedInstance,

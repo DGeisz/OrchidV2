@@ -1,9 +1,9 @@
 import { EditorComplex } from "./EditorComplex";
 import { RepresentationEngine, StatusClass } from "./RepresentationEngine";
-import { Instance } from "../Registries/InstanceRegistry/Instance";
+import { Instance } from "../../Junk/RegistriesII/InstanceRegistry/Instance";
 import { stripSlash } from "../utils/functions";
 import { builtInAccessors } from "./BuiltIns";
-import { AccessorRegistry } from "../Registries/AccessorRegistry/AccessorRegistry";
+import { AccessorRegistry } from "../../Junk/RegistriesII/AccessorRegistry/AccessorRegistry";
 
 
 interface ParsedInput {

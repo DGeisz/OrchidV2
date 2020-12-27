@@ -1,7 +1,8 @@
-import { BattleMap } from "../BattleMap/BattleMap";
-import { builtInQuivers } from "../BattleMap/BuiltInQuivers";
+// import { builtInQuivers } from "../BattleMap/BuiltInQuivers";
+import { BattleMap } from "./BattleMap";
+import { builtInQuivers } from "./BuiltInQuivers";
 import { v4 } from "uuid";
-import { parseBoolean } from "../utils/functions";
+import { parseBoolean } from "../../../utils/functions";
 
 const typeQ = builtInQuivers.type;
 const trueQ = builtInQuivers.true;

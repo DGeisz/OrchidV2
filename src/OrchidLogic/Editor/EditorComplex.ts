@@ -1,10 +1,10 @@
 import { Dock } from "./Dock";
 import { RepresentationEngine } from "./RepresentationEngine";
-import { PageRegistry } from "../Registries/PageRegistry/PageRegistry";
-import { RepresentationRegistry } from "../Registries/RepresentationRegistry/RepresentationRegistry";
-import { BattleMap } from "../BattleMap/BattleMap";
-import { AccessorRegistry } from "../Registries/AccessorRegistry/AccessorRegistry";
-import { builtInQuivers } from "../BattleMap/BuiltInQuivers";
+import { PageRegistry } from "../../Junk/RegistriesII/PageRegistry/PageRegistry";
+import { RepresentationRegistry } from "../../Junk/RegistriesII/RepresentationRegistry/RepresentationRegistry";
+import { BattleMap } from "../../Junk/BattleMap/BattleMap";
+import { AccessorRegistry } from "../../Junk/RegistriesII/AccessorRegistry/AccessorRegistry";
+import { builtInQuivers } from "../../Junk/BattleMap/BuiltInQuivers";
 import { parseBoolean } from "../utils/functions";
 
 export class EditorComplex {

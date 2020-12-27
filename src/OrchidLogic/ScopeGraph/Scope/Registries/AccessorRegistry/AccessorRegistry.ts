@@ -1,4 +1,3 @@
-import { builtInAccessors } from "../../Editor/BuiltIns";
 import { builtInAccessorMap } from "./BuiltInAccessors";
 
 export class AccessorRegistry {

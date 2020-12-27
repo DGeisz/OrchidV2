@@ -1,4 +1,4 @@
-import { builtInQuivers } from "../../BattleMap/BuiltInQuivers";
+import { builtInQuivers } from "../../BattleOps/BuiltInQuivers";
 
 export const builtInAccessorMap: { [key: string]: string; } = {
     iB: builtInQuivers.isBool,

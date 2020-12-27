@@ -2,7 +2,7 @@ import { v4 } from 'uuid';
 import { BattleMap } from "../../BattleMap/BattleMap";
 import { InstanceType } from "./FlatInstanceTypes";
 import { builtInQuivers } from "../../BattleMap/BuiltInQuivers";
-import { parseBoolean } from "../../utils/functions";
+import { parseBoolean } from "../../../OrchidLogic/utils/functions";
 import { InstanceRegistry } from "./InstanceRegistry";
 import { Line } from "../PageRegistry/Line";
 
