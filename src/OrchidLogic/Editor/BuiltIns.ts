@@ -7,10 +7,6 @@ export const builtInViewIds = {
     dock: 'dock'
 };
 
-export const viewTags = {
-    div: 'div'
-};
-
 export const builtInAccessors = {
     emptyArrow: '->',
     emptyTuple: '[]'

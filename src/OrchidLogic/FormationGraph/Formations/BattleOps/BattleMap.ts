@@ -1,3 +1,8 @@
+/**
+ * The battle map is the data structure that holds all information
+ * about the quivers that are used to construct features in a formation
+ * (equations in a theory if you want to use incorrect but helpful language)
+ */
 export class BattleMap {
     private quiverMap: Map<string, Map<string, string>>;
 

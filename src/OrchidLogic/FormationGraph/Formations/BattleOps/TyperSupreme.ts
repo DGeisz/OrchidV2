@@ -20,6 +20,9 @@ const tupleTypeSizeQ = builtInQuivers.tupleTypeSize;
  * checking types within the battle map. This is actually a delicate
  * process that informs when different instances are allowed and can
  * be committed
+ *
+ * Of particular concern are the types related to maps and tuples.
+ * These bois are the most slippery and prone to create challenges
  */
 export class TyperSupreme {
 

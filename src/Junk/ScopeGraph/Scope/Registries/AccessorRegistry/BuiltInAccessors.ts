@@ -1,4 +1,4 @@
-import { builtInQuivers } from "../../BattleOps/BuiltInQuivers";
+import { builtInQuivers } from "../../../../../OrchidLogic/FormationGraph/Formations/BattleOps/BuiltInQuivers";
 
 export const builtInAccessorMap: { [key: string]: string; } = {
     iB: builtInQuivers.isBool,
