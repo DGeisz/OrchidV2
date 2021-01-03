@@ -33,7 +33,7 @@ export class Dock {
     private input: string = '';
     private cursorPosition: number = 0;
 
-    constructor(instance: Instance, editorComplex: EditorComplex) {
+    constructor(editorComplex: EditorComplex) {
         this.currentInstance = instance;
         this.editorComplex = editorComplex;
         this.accessorRegistry = editorComplex.getAccessorRegistry();

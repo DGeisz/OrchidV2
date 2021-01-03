@@ -1,2 +1,5 @@
 # OrchidV2
-Category of sets based mathematical software that replaces pencil and paper mathematics
+
+Orchid provides a useful set of features for creating well-defined structures with symbolic representations and well-defined behavior.
+
+Orchid essentially aims to digitize and replace a wide swath of standard mathematics.
